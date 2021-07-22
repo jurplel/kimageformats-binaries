@@ -7,7 +7,7 @@ git checkout $(git tag | select -last 1)
 
 # vcvars on windows
 if ($IsWindows) {
-    & "$env:BUILD_REPOSITORY_LOCALPATH/ci/pwsh/vcvars.ps1"
+    & "$env:GITHUB_WORKSPACE/ci/pwsh/vcvars.ps1"
 }
 
 # Get meson

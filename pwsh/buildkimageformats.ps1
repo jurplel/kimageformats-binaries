@@ -12,8 +12,8 @@ if ($IsWindows) {
         $env:VCPKG_DEFAULT_TRIPLET = "x64-windows"
     }
     
-    & "$env:BUILD_REPOSITORY_LOCALPATH/ci/pwsh/buildecm.ps1"
-    & "$env:VCPKG_INSTALLATION_ROOT/vcpkg.exe" install libheif libavif openexr
+    & "$env:GITHUB_WORKSPACE/ci/pwsh/buildecm.ps1"
+    & "$env:VCPKG_ROOT/vcpkg.exe" install libheif libavif openexr
 } else {
     brew update
     brew install nasm openexr libheif karchive
@@ -23,12 +23,12 @@ if ($IsWindows) {
         brew install ninja extra-cmake-modules
     } else {
         sudo apt-get install ninja-build
-        & "$env:BUILD_REPOSITORY_LOCALPATH/ci/pwsh/buildecm.ps1"
+        & "$env:GITHUB_WORKSPACE/ci/pwsh/buildecm.ps1"
     }
 
     # Build libavif dependency
 
-    & "$env:BUILD_REPOSITORY_LOCALPATH/ci/pwsh/buildlibavif.ps1"
+    & "$env:GITHUB_WORKSPACE/ci/pwsh/buildlibavif.ps1"
 
     $env:libavif_DIR = "libavif/build/installed/usr/local/lib/cmake/libavif/"
 }
@@ -38,11 +38,11 @@ if ($IsWindows) {
 
 # vcvars on windows
 if ($IsWindows) {
-    & "$env:BUILD_REPOSITORY_LOCALPATH/ci/pwsh/vcvars.ps1"
+    & "$env:GITHUB_WORKSPACE/ci/pwsh/vcvars.ps1"
 }
 
 
-cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DKIMAGEFORMATS_HEIF=ON -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT\scripts\buildsystems\vcpkg.cmake" .
+cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DKIMAGEFORMATS_HEIF=ON -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" .
 
 ninja
 ninja install
