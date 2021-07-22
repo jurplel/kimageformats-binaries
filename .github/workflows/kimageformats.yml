@@ -11,11 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Build KImageFormats (just one big step for now)
-        run: pwsh/buildkimageformats.ps1
-        
       - name: Restore from cache and install vcpkg
       # Download and build vcpkg, without installing any port. If content is cached already, it is a no-op.
         uses: lukka/run-vcpkg@v7
         with:
           setupOnly: true
+
+      - name: Build KImageFormats (just one big step for now)
+        run: pwsh/buildkimageformats.ps1
+        
