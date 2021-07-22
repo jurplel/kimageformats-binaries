@@ -38,7 +38,7 @@ if ($IsWindows) {
 
 # vcvars on windows
 if ($IsWindows) {
-    & "$env:GITHUB_WORKSPACE/ci/pwsh/vcvars.ps1"
+    & "$env:GITHUB_WORKSPACE/pwsh/vcvars.ps1"
 }
 
 
