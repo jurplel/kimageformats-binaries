@@ -12,7 +12,7 @@ if ($IsWindows) {
         $env:VCPKG_DEFAULT_TRIPLET = "x64-windows"
     }
     
-    & "$env:GITHUB_WORKSPACE/ci/pwsh/buildecm.ps1"
+    & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1"
     & "$env:VCPKG_ROOT/vcpkg.exe" install libheif libavif openexr
 } else {
     brew update
@@ -23,12 +23,12 @@ if ($IsWindows) {
         brew install ninja extra-cmake-modules
     } else {
         sudo apt-get install ninja-build
-        & "$env:GITHUB_WORKSPACE/ci/pwsh/buildecm.ps1"
+        & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1"
     }
 
     # Build libavif dependency
 
-    & "$env:GITHUB_WORKSPACE/ci/pwsh/buildlibavif.ps1"
+    & "$env:GITHUB_WORKSPACE/pwsh/buildlibavif.ps1"
 
     $env:libavif_DIR = "libavif/build/installed/usr/local/lib/cmake/libavif/"
 }
