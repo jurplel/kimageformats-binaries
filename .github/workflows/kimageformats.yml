@@ -1,0 +1,21 @@
+name: Build KImageFormats
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build KImageFormats (just one big step for now)
+        run: pwsh/buildkimageformats.ps1
+        
+      - name: Restore from cache and install vcpkg
+      # Download and build vcpkg, without installing any port. If content is cached already, it is a no-op.
+        uses: lukka/run-vcpkg@v7
+        with:
+          setupOnly: true
