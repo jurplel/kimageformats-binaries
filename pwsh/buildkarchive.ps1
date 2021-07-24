@@ -20,7 +20,7 @@ cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROO
 ninja
 
 if ($IsWindows) {
-    $env:KF5Archive_DIR = $PWD\CMakeFiles\Export\lib\cmake\KF5Archive
+    $env:KF5Archive_DIR = "$PWD\CMakeFiles\Export\lib\cmake\KF5Archive"
 }
 
 cd ../
