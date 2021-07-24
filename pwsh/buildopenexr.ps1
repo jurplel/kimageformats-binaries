@@ -1,15 +1,12 @@
-#! /usr/bin/pwsh
-
-# Clone
-git clone https://invent.kde.org/frameworks/karchive.git
-cd karchive
-git checkout $(git describe --abbrev=0).substring(0, 7)
+git clone https://github.com/AcademySoftwareFoundation/openexr.git
+cd openexr
+git checkout v3.1.0
 
 if ($IsWindows) {
     if ([Environment]::Is64BitOperatingSystem) {
         $env:VCPKG_DEFAULT_TRIPLET = "x64-windows"
     }
-    
+
     & "$env:VCPKG_ROOT/vcpkg.exe" install zlib
 }
 
@@ -25,7 +22,7 @@ ninja
 ninja install
 
 if ($IsWindows) {
-    $env:KF5Archive_DIR = "$PWD\installed\lib\cmake\KF5Archive"
+    $env:OpenEXR_DIR = "$PWD\installed\lib\cmake\OpenEXR"
 }
 
 cd ../
