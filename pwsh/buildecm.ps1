@@ -13,10 +13,11 @@ if ($IsWindows) {
 # Build
 cmake -G Ninja .
 
-ninja install
-
 if ($IsWindows) {
+    ninja install
     $env:ECM_DIR = "$PWD\installed\Program Files (x86)\ECM\share\ECM"
+} else {
+    sudo ninja install
 }
 
 cd ../
