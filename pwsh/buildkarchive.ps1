@@ -18,6 +18,9 @@ if ($IsWindows) {
 cmake -G Ninja -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" .
 
 ninja
-ninja install
+
+if ($IsWindows) {
+    $env:KF5Archive_DIR = $PWD
+}
 
 cd ../
