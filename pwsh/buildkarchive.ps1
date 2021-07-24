@@ -15,12 +15,12 @@ if ($IsWindows) {
 }
 
 # Build
-cmake -G Ninja -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" .
+cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" .
 
 ninja
 
 if ($IsWindows) {
-    $env:KF5Archive_DIR = $PWD
+    $env:KF5Archive_DIR = $PWD\CMakeFiles\Export\lib\cmake\KF5Archive
 }
 
 cd ../
