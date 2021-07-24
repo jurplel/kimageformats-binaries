@@ -29,4 +29,9 @@ jobs:
 
       - name: Build KImageFormats (just one big step for now)
         run: pwsh pwsh/buildkimageformats.ps1
-        
+
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v2
+        with:
+          name: kimageformats-${{ github.run_number }}
+          path: ${{ github.workspace }}/bin/imageformats/
