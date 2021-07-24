@@ -20,7 +20,7 @@ cmake -G Ninja -DCMAKE_INSTALL_PREFIX="$PWD\installed\" -DCMAKE_BUILD_TYPE=Relea
 ninja
 
 if ($IsWindows) {
-    $env:KF5Archive_DIR = "$PWD\installed"
+    $env:KF5Archive_DIR = "$PWD\installed\lib\cmake\KF5Archive"
 }
 
 cd ../
