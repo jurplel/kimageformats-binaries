@@ -13,7 +13,8 @@ if ($IsWindows) {
     }
     
     & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1"
-    & "$env:VCPKG_ROOT/vcpkg.exe" install libheif libavif openexr
+    & "$env:GITHUB_WORKSPACE/pwsh/buildkarchive.ps1"
+    & "$env:VCPKG_ROOT/vcpkg.exe" install libheif libavif
 } else {
     brew update
     brew install nasm openexr libheif karchive
