@@ -15,7 +15,7 @@ if ($IsWindows) {
 }
 
 # Build
-cmake -G Ninja .
+cmake -G Ninja -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" .
 
 ninja
 ninja install
