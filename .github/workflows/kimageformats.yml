@@ -9,7 +9,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-18.04, macos-10.15, windows-2019]
+        os: [ubuntu-20.04, macos-10.15, windows-2019]
 
     steps:
       - uses: actions/checkout@v2
@@ -28,5 +28,5 @@ jobs:
           vcpkgGitCommitId: 'c2e8ba09ce99ae9b3f5c720bbe93da860575193e'
 
       - name: Build KImageFormats (just one big step for now)
-        run: pwsh/buildkimageformats.ps1
+        run: pwsh pwsh/buildkimageformats.ps1
         
