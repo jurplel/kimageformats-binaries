@@ -23,6 +23,7 @@ ninja install
 
 if ($IsWindows) {
     $env:OpenEXR_DIR = "$PWD\installed\lib\cmake\OpenEXR"
+    $env:Imath_DIR = "$PWD\installed\lib\cmake\Imath"
 }
 
 cd ../
