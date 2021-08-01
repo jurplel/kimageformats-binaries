@@ -18,15 +18,16 @@ if ($IsWindows) {
     & "$env:VCPKG_ROOT/vcpkg.exe" install libheif libavif
 } else {
     brew update
-    brew install nasm libheif karchive # openexr can be added here for mac with kimageformats 5.85.0!
+    brew install nasm libheif # openexr can be added here for mac with kimageformats 5.85.0!
 
     # extra-cmake-modules isn't on linuxbrew and I can't remember why ninja is done throught apt
     if ($IsMacOS) {
-        brew install ninja extra-cmake-modules
+        brew install ninja extra-cmake-modules karchive
     } else {
         brew install openexr
         sudo apt-get install ninja-build
         & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1"
+        & "$env:GITHUB_WORKSPACE/pwsh/buildkarchive.ps1"
     }
 
     # Build libavif dependency
