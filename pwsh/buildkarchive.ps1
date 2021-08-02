@@ -27,7 +27,7 @@ ninja install
 if ($IsWindows) {
     $env:KF5Archive_DIR = "$PWD\installed\lib\cmake\KF5Archive"
 } else {
-    $env:KF5Archive_DIR = "$PWD/installed/lib/x86_64-linux-gnu/KF5Archive"
+    $env:KF5Archive_DIR = "$PWD/installed/lib/x86_64-linux-gnu/cmake/KF5Archive"
 }
 
 cd ../
