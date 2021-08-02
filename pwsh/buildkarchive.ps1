@@ -19,7 +19,11 @@ if ($IsWindows) {
 }
 
 # Build
-cmake -G Ninja -DCMAKE_INSTALL_PREFIX="$PWD\installed\" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" .
+if ($IsWindows) {
+    cmake -G Ninja -DCMAKE_INSTALL_PREFIX="$PWD\installed\" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" .
+} else {
+    cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" .
+}
 
 ninja
 ninja install

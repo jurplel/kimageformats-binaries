@@ -24,6 +24,7 @@ if ($IsWindows) {
     if ($IsMacOS) {
         brew install ninja extra-cmake-modules karchive
     } else {
+        $env:PKG_CONFIG_PATH += ":/home/linuxbrew/.linuxbrew/lib/pkgconfig"
         brew install openexr
         sudo apt-get install ninja-build
         & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1"
