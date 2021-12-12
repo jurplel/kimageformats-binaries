@@ -26,5 +26,5 @@ jobs:
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v2
         with:
-          name: qtapng-${{ github.run_number }}-${{ matrix.os }}
+          name: qtapng-${{ github.run_number }}-${{ matrix.os }}-${{ matrix.vers }}
           path: ${{ github.workspace }}/QtApng/plugins/imageformats/

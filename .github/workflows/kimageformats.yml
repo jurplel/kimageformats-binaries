@@ -34,5 +34,5 @@ jobs:
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v2
         with:
-          name: kimageformats-${{ github.run_number }}-${{ matrix.os }}
+          name: kimageformats-${{ github.run_number }}-${{ matrix.os }}-${{ matrix.vers }}
           path: ${{ github.workspace }}/kimageformats/bin/imageformats/
