@@ -14,7 +14,7 @@ if ($IsWindows) {
         $env:VCPKG_DEFAULT_TRIPLET = "x64-windows"
     }
     
-    & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1 $kde_vers"
+    & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1" $kde_vers
     & "$env:GITHUB_WORKSPACE/pwsh/buildkarchive.ps1"
     & "$env:GITHUB_WORKSPACE/pwsh/buildopenexr.ps1"
     & "$env:VCPKG_ROOT/vcpkg.exe" install libheif libavif openexr
