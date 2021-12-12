@@ -3,7 +3,7 @@
 # Clone
 git clone https://invent.kde.org/frameworks/extra-cmake-modules.git
 cd extra-cmake-modules
-git checkout $(git describe --abbrev=0).substring(0, 7)
+git checkout $args[0]
 
 # vcvars on windows
 if ($IsWindows) {

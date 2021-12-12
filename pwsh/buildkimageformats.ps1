@@ -1,9 +1,11 @@
 #! /usr/bin/pwsh
 
+$kde_vers = 'v5.88.0'
+
 # Clone
 git clone https://invent.kde.org/frameworks/kimageformats.git
 cd kimageformats
-git checkout $(git describe --abbrev=0).substring(0, 7)
+git checkout $kde_vers
 
 
 # Get dependencies
@@ -12,13 +14,13 @@ if ($IsWindows) {
         $env:VCPKG_DEFAULT_TRIPLET = "x64-windows"
     }
     
-    & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1"
+    & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1 $kde_vers"
     & "$env:GITHUB_WORKSPACE/pwsh/buildkarchive.ps1"
-    & "$env:GITHUB_WORKSPACE/pwsh/buildopenexr.ps1" # With kimageformats 5.85.0, vcpkg can be used for this
-    & "$env:VCPKG_ROOT/vcpkg.exe" install libheif libavif
+    & "$env:GITHUB_WORKSPACE/pwsh/buildopenexr.ps1"
+    & "$env:VCPKG_ROOT/vcpkg.exe" install libheif libavif openexr
 } else {
     brew update
-    brew install nasm libheif # openexr can be added here for mac with kimageformats 5.85.0!
+    brew install nasm libheif openexr
 
     # extra-cmake-modules isn't on linuxbrew and I can't remember why ninja is done throught apt
     if ($IsMacOS) {
