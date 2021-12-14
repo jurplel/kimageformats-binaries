@@ -52,3 +52,19 @@ if ($IsWindows) {
 cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DKIMAGEFORMATS_HEIF=ON -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" .
 
 ninja
+
+
+# Move some dependencies around
+if ($IsMacOS || $IsLinux) {
+    mv libavif/build/installed/libavif.dylib ./bin/
+    mv libavif/build/installed/libavif.so ./bin/
+
+    mv karchive/bin/*.dylib ./bin/
+    mv karchive/bin/*.so ./bin/
+} elseif ($IsWindows) {
+    mv kimageformats/bin/imageformats/aom.dll kimageformats/bin/
+    mv kimageformats/bin/imageformats/avif.dll kimageformats/bin/
+    mv kimageformats/bin/imageformats/heif.dll kimageformats/bin/
+    mv kimageformats/bin/imageformats/libde265.dll kimageformats/bin/
+    mv kimageformats/bin/imageformats/libx265.dll kimageformats/bin/
+}
