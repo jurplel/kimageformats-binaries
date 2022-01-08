@@ -1,6 +1,6 @@
 #! /usr/bin/pwsh
 
-$kde_vers = 'v5.88.0'
+$kde_vers = 'v5.89.0'
 
 # Clone
 git clone https://invent.kde.org/frameworks/kimageformats.git
@@ -17,10 +17,10 @@ if ($IsWindows) {
     & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1" $kde_vers
     & "$env:GITHUB_WORKSPACE/pwsh/buildkarchive.ps1"
     & "$env:GITHUB_WORKSPACE/pwsh/buildopenexr.ps1"
-    & "$env:VCPKG_ROOT/vcpkg.exe" install libheif libavif openexr
+    & "$env:VCPKG_ROOT/vcpkg.exe" install libheif libavif libjxl openexr
 } else {
     brew update
-    brew install nasm libheif openexr
+    brew install nasm libheif openexr jpeg-xl
 
     # extra-cmake-modules isn't on linuxbrew and I can't remember why ninja is done throught apt
     if ($IsMacOS) {
@@ -68,3 +68,5 @@ if ($IsMacOS || $IsLinux) {
     mv kimageformats/bin/imageformats/libde265.dll kimageformats/bin/
     mv kimageformats/bin/imageformats/libx265.dll kimageformats/bin/
 }
+
+tree
