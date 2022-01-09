@@ -1,4 +1,4 @@
-name: Build qt-heic-image-plugin
+name: Build qt-jpegxl-image-plugin
 on:
   push:
     branches: [ master ]

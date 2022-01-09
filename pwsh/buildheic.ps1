@@ -7,6 +7,11 @@ git checkout 79fc828f6365d26045ad79acb80eb91a1251fdad
 
 if ($IsWindows) {
     & "$env:GITHUB_WORKSPACE/pwsh/vcvars.ps1"
+    choco install ninja
+} elseif ($IsMacOS) {
+    brew install ninja
+} else {
+    sudo apt-get install ninja-build
 }
 
 # build libheif and stuff

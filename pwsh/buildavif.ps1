@@ -1,16 +1,22 @@
 #! /usr/bin/pwsh
 
+if ($IsWindows) {
+    & "$env:GITHUB_WORKSPACE/pwsh/vcvars.ps1"
+    choco install ninja
+    python -m pip install meson
+    choco install wget
+} elseif ($IsMacOS) {
+    brew install ninja
+} else {
+    sudo apt-get install ninja-build
+}
+
 # Clone
 git clone https://github.com/novomesk/qt-avif-image-plugin
 cd qt-avif-image-plugin
 git checkout ffda69508b2b7299d041fa1360259c2c9c6c8c3c
 
-if ($IsWindows) {
-    python -m pip install meson
-    choco install wget
-    
-    & "$env:GITHUB_WORKSPACE/pwsh/vcvars.ps1"
-
+if ($IsWindows) {    
     # libyuv
     cd ext\libavif\ext\libyuv
     mkdir build

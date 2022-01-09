@@ -1,5 +1,14 @@
 #! /usr/bin/pwsh
 
+if ($IsWindows) {
+    & "$env:GITHUB_WORKSPACE/pwsh/vcvars.ps1"
+    choco install ninja
+} elseif ($IsMacOS) {
+    brew install ninja
+} else {
+    sudo apt-get install ninja-build
+}
+
 # Clone
 git clone --depth 1 https://github.com/novomesk/qt-jpegxl-image-plugin.git
 cd qt-jpegxl-image-plugin
