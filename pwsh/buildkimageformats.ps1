@@ -8,6 +8,8 @@ cd kimageformats
 git checkout $kde_vers
 
 
+
+# dependencies
 if ($IsWindows) {
     & "$env:GITHUB_WORKSPACE/pwsh/vcvars.ps1"
     choco install ninja
@@ -18,26 +20,8 @@ if ($IsWindows) {
     sudo apt-get install ninja-build
 }
 
-
-# dependencies
-if ($IsWindows) {
-    if ([Environment]::Is64BitOperatingSystem) {
-        $env:VCPKG_DEFAULT_TRIPLET = "x64-windows"
-    }
-
-    # update vcpkg
-    & "$env:VCPKG_ROOT/bootstrap-vcpkg.bat"
-    
-    & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1" $kde_vers
-} else {
-    brew install extra-cmake-modules
-
-    if (!$IsMacOS) {
-        $env:PKG_CONFIG_PATH += ":/home/linuxbrew/.linuxbrew/lib/pkgconfig"
-    }
-}
-
 & "$env:GITHUB_WORKSPACE/pwsh/buildkarchive.ps1"
+& "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1" $kde_vers
 
 
 # Build kimageformats
