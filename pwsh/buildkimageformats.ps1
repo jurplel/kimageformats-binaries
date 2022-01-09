@@ -13,6 +13,9 @@ if ($IsWindows) {
     if ([Environment]::Is64BitOperatingSystem) {
         $env:VCPKG_DEFAULT_TRIPLET = "x64-windows"
     }
+
+    # update vcpkg
+    & "$env:VCPKG_ROOT/bootstrap-vcpkg.bat"
     
     & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1" $kde_vers
     & "$env:GITHUB_WORKSPACE/pwsh/buildkarchive.ps1"
