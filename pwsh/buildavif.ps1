@@ -47,6 +47,11 @@ if ($IsWindows) {
     qmake qt-avif-image-plugin_local_alternative-libavif-ro.pro
     nmake
 } else {
+    brew install nasm
+    if (!$IsMacOS) {
+        $env:PKG_CONFIG_PATH += ":/home/linuxbrew/.linuxbrew/lib/pkgconfig"
+    }
+
     ./build_libqavif_static.sh
     make
     sudo make install

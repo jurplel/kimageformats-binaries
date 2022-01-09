@@ -36,3 +36,7 @@ if ($IsWindows) {
     make
 }
 
+# Copy libheif stuff to output (It's not compiled statically I guess?)
+if ($IsWindows) {
+    cp ../3rdparty/install/bin/*.dll  bin/
+}

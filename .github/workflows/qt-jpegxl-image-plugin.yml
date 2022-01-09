@@ -27,4 +27,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: qtjpegxl-${{ github.run_number }}-${{ matrix.os }}-${{ matrix.vers }}
-          path: ${{ github.workspace }}/qt-jpegxl-image-plugin/plugins/imageformats
+          path: ${{ github.workspace }}/qt-jpegxl-image-plugin/plugins
