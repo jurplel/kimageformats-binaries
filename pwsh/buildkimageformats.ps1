@@ -1,12 +1,15 @@
 #! /usr/bin/pwsh
 
-$kde_vers = 'v5.89.0'
+# remember to update modified cmakelists each version change
+$kde_vers = 'v5.90.0'
 
 # Clone
 git clone https://invent.kde.org/frameworks/kimageformats.git
+
+cp -f ./CMakeLists.txt kimageformats/src/imageformats/CMakeLists.txt
+
 cd kimageformats
 git checkout $kde_vers
-
 
 # Get dependencies
 if ($IsWindows) {
@@ -16,15 +19,15 @@ if ($IsWindows) {
     
     & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1" $kde_vers
     & "$env:GITHUB_WORKSPACE/pwsh/buildkarchive.ps1"
-    & "$env:GITHUB_WORKSPACE/pwsh/buildopenexr.ps1"
     & "$env:VCPKG_ROOT/vcpkg.exe" install libheif libavif libjxl openexr
 } else {
     brew update
-    brew install nasm libheif openexr jpeg-xl libavif karchive extra-cmake-modules karchive
+    brew install nasm libheif openexr jpeg-xl libavif karchive
 
-    # extra-cmake-modules isn't on linuxbrew and I can't remember why ninja is done throught apt
+    & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1" $kde_vers
+
     if ($IsMacOS) {
-        brew install ninja extra-cmake-modules 
+        brew install ninja 
     } else {
         $env:PKG_CONFIG_PATH += ":/home/linuxbrew/.linuxbrew/lib/pkgconfig"
         sudo apt-get install ninja-build
