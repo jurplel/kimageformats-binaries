@@ -1,10 +1,10 @@
 #! /usr/bin/pwsh
 
+python -m pip install meson
+
 if ($IsWindows) {
     & "$env:GITHUB_WORKSPACE/pwsh/vcvars.ps1"
-    choco install ninja
-    python -m pip install meson
-    choco install wget
+    choco install ninja wget
 } elseif ($IsMacOS) {
     brew install ninja
 } else {
