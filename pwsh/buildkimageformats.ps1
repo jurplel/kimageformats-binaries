@@ -6,8 +6,8 @@ $kde_vers = 'v5.90.0'
 # Clone
 git clone https://invent.kde.org/frameworks/kimageformats.git
 
-cp -Force ./CMakeLists1.txt kimageformats/CMakeLists.txt
-cp -Force ./CMakeLists2.txt kimageformats/src/imageformats/CMakeLists.txt
+Copy-Item ./CMakeLists1.txt -Destination kimageformats/CMakeLists.txt -Force
+Copy-Item ./CMakeLists2.txt -Destination kimageformats/src/imageformats/CMakeLists.txt -Force
 
 cd kimageformats
 git checkout $kde_vers
