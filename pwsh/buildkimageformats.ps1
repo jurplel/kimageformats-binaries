@@ -24,14 +24,14 @@ if ($IsWindows) {
     brew update
     brew install nasm libheif openexr jpeg-xl libavif karchive
 
-    & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1" $kde_vers
-
     if ($IsMacOS) {
         brew install ninja 
     } else {
         $env:PKG_CONFIG_PATH += ":/home/linuxbrew/.linuxbrew/lib/pkgconfig"
         sudo apt-get install ninja-build
     }
+
+    & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1" $kde_vers
 }
 
 
