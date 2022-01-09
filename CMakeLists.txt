@@ -2,6 +2,17 @@
 
 ##################################
 
+# CUSTOM
+# Support preference of static libs by adjusting CMAKE_FIND_LIBRARY_SUFFIXES
+if( Boost_USE_STATIC_LIBS )
+  set( _boost_ORIG_CMAKE_FIND_LIBRARY_SUFFIXES ${CMAKE_FIND_LIBRARY_SUFFIXES})
+  if(WIN32)
+    list(INSERT CMAKE_FIND_LIBRARY_SUFFIXES 0 .lib .a)
+  else()
+    set(CMAKE_FIND_LIBRARY_SUFFIXES .a)
+  endif()
+endif()
+
 function(kimageformats_add_plugin plugin)
     set(options)
     set(multiValueArgs SOURCES)
@@ -76,7 +87,7 @@ install(FILES hdr.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR}/qimageioplugi
 
 if (LibHeif_FOUND)
     kimageformats_add_plugin(kimg_heif SOURCES heif.cpp)
-    target_link_libraries(kimg_heif PkgConfig::LibHeif)
+    target_link_libraries(kimg_heif PkgConfig::LibHeif_STATIC)
     kde_target_enable_exceptions(kimg_heif PRIVATE)
     install(FILES heif.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR}/qimageioplugins/)
 endif()
@@ -85,7 +96,7 @@ endif()
 
 if (LibJXL_FOUND AND LibJXLThreads_FOUND)
     kimageformats_add_plugin(kimg_jxl SOURCES jxl.cpp)
-    target_link_libraries(kimg_jxl PkgConfig::LibJXL PkgConfig::LibJXLThreads)
+    target_link_libraries(kimg_jxl PkgConfig::LibJXL_STATIC PkgConfig::LibJXLThreads_STATIC)
     install(FILES jxl.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR}/qimageioplugins/)
 endif()
 
