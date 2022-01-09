@@ -55,11 +55,12 @@ ninja
 
 
 # Move some dependencies around
-if ($IsMacOS || $IsLinux) {
-    mv libavif/build/installed/libavif.dylib ./bin/
-    mv libavif/build/installed/libavif.so ./bin/
+if ($IsMacOS) {
+    mv libavif/build/installed/usr/local/lib/libavif.dylib ./bin/
 
     mv karchive/bin/*.dylib ./bin/
+} elseif ($IsLinux) {
+    mv libavif/build/installed/libavif.so ./bin/
     mv karchive/bin/*.so ./bin/
 } elseif ($IsWindows) {
     mv kimageformats/bin/imageformats/aom.dll kimageformats/bin/
@@ -69,4 +70,4 @@ if ($IsMacOS || $IsLinux) {
     mv kimageformats/bin/imageformats/libx265.dll kimageformats/bin/
 }
 
-tree
+find .
