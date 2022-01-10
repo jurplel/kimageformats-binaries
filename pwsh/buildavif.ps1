@@ -52,7 +52,37 @@ if ($IsWindows) {
         $env:PKG_CONFIG_PATH += ":/home/linuxbrew/.linuxbrew/lib/pkgconfig"
     }
 
-    ./build_libqavif_static.sh
+    echo 'We are going to build libyuv.a'
+    cd ext/libavif/ext/libyuv
+    mkdir build
+    cd build
+  
+    cmake -G Ninja -DBUILD_SHARED_LIBS=0 -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" ..
+    ninja yuv
+
+    cd ../../../
+
+    echo 'We are going to build libdav1d.a'
+    cd ext/dav1d
+    mkdir build
+    cd build
+
+    meson --default-library=static --buildtype release ..
+    ninja
+
+    cd ../../../
+
+    echo 'We are going to build libavif.a'
+    mkdir build
+    cd build
+    cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DAVIF_CODEC_DAV1D=ON -DAVIF_LOCAL_DAV1D=ON -DAVIF_LOCAL_LIBYUV=ON -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"  ..
+    ninja
+
+    cd ../../../
+    
+    echo 'We are going to build qt-avif-image-plugin'
+    cd qtbuild_6.2.2-ro
+    
+    qmake QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64" .
     make
-    sudo make install
 }

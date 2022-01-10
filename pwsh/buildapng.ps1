@@ -14,11 +14,10 @@ if ($IsWindows) {
     & "$env:GITHUB_WORKSPACE/pwsh/vcvars.ps1"
 }
 
-qmake "CONFIG += libpng_static"
+qmake "CONFIG += libpng_static" QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64"
 if ($IsWindows) {
     nmake
 } else {
     make
-    sudo make install
 }
 cd ..
