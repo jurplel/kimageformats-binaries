@@ -13,11 +13,11 @@ jobs:
         vers: ['5.15.2']
         forceWin32: ['false']
         include:
-          - vers: '5.15.2'
-            os: windows-2019
+          - os: windows-2019
+            vers: '5.15.2'
             forceWin32: 'true'
-          - vers: '6.2.1'
-            os: macos-10.15
+          - os: macos-10.15
+            vers: '6.2.1'
             forceWin32: 'false'
 
     steps:
@@ -36,5 +36,5 @@ jobs:
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v2
         with:
-          name: qtapng-${{ github.run_number }}-${{ matrix.os }}-${{ matrix.vers }}
+          name: qtapng-${{ github.run_number }}-${{ matrix.os }}-${{ matrix.vers }}-${{ matrix.forceWin32 }}
           path: ${{ github.workspace }}/QtApng/plugins
