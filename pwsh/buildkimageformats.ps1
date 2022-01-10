@@ -22,15 +22,17 @@ if ($IsWindows) {
 
 & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1" $kde_vers
 & "$env:GITHUB_WORKSPACE/pwsh/buildkarchive.ps1"
-
+& "$env:GITHUB_WORKSPACE/pwsh/buildlibjxl.ps1"
 
 # Build kimageformats
 
-cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DKIMAGEFORMATS_HEIF=ON -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" -DBUILD_WITH_QT6=ON .
+cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DKIMAGEFORMATS_JXL=ON -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" -DBUILD_WITH_QT6=ON .
 
 ninja
 
 # Copy karchive stuff to output
 if ($IsWindows) {
     cp karchive/bin/*.dll  bin/
+} elseif ($IsMacOS) {
+    cp karchive/bin/libKF5Archive.dylib  bin/
 }

@@ -14,20 +14,16 @@ if ($IsWindows) {
 }
 
 # vcvars on windows
-if ($IsWindows) {
+if ($IsWindows) {   
     & "$env:GITHUB_WORKSPACE\pwsh\vcvars.ps1"
 }
 
 # Build
-cmake -G Ninja -DCMAKE_INSTALL_PREFIX="$PWD\installed\" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" -DBUILD_WITH_QT6=ON .
+cmake -G Ninja -DCMAKE_INSTALL_PREFIX="$PWD/installed/" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" -DBUILD_WITH_QT6=ON .
 
 ninja
 ninja install
 
-if ($IsWindows) {
-    $env:KF5Archive_DIR = "$PWD\installed\lib\cmake\KF5Archive"
-} else {
-    $env:KF5Archive_DIR = "$PWD/installed/lib/x86_64-linux-gnu/cmake/KF5Archive"
-}
+$env:KF5Archive_DIR = "$PWD/installed/lib/cmake/KF5Archive"
 
 cd ../
