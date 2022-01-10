@@ -38,7 +38,7 @@ if ($IsWindows) {
     cd ..\..\..\
     mkdir build-ro
     cd build-ro
-    cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DAVIF_CODEC_DAV1D=ON -DAVIF_LOCAL_DAV1D=ON -DAVIF_LOCAL_LIBYUV=ON -DCMAKE_CXX_FLAGS=/w ..
+    cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DAVIF_CODEC_DAV1D=ON -DAVIF_LOCAL_DAV1D=ON -DAVIF_LOCAL_LIBYUV=ON -DAVIF_ENABLE_WERROR=OFF ..
     ninja
     copy avif.lib libavif.a 
     
