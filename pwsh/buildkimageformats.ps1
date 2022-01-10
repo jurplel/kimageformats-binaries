@@ -23,6 +23,7 @@ if ($IsWindows) {
 & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1" $kde_vers
 & "$env:GITHUB_WORKSPACE/pwsh/buildkarchive.ps1"
 & "$env:GITHUB_WORKSPACE/pwsh/buildlibjxl.ps1"
+& "$env:GITHUB_WORKSPACE/pwsh/buildopenexr.ps1"
 
 # Build kimageformats
 
@@ -30,9 +31,15 @@ cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DKIMAGEFORMATS_JXL=ON -DCMAKE_TOOLCHA
 
 ninja
 
-# Copy karchive stuff to output
+# Copy stuff to output
 if ($IsWindows) {
     cp karchive/bin/*.dll  bin/
 } elseif ($IsMacOS) {
     cp karchive/bin/libKF5Archive.dylib  bin/
+
+    cp libjxl/installed/lib/libjxl.dylib  bin/
+    cp libjxl/installed/lib/libjxl_threads.dylib  bin/
+
+    cp openexr/installed/lib/libOpenEXR.dylib  bin/
+    cp openexr/installed/lib/libImath.dylib  bin/
 }

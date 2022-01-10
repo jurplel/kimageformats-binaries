@@ -1,6 +1,6 @@
 git clone https://github.com/AcademySoftwareFoundation/openexr.git
 cd openexr
-git checkout v3.1.0
+git checkout v3.1.3
 
 if ($IsWindows) {
     if ([Environment]::Is64BitOperatingSystem -and ($env:forceWin32 -ne 'true')) {
@@ -16,14 +16,12 @@ if ($IsWindows) {
 }
 
 # Build
-cmake -G Ninja -DCMAKE_INSTALL_PREFIX="$PWD\installed\" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" .
+cmake -G Ninja -DCMAKE_INSTALL_PREFIX="$PWD\installed\" -DOPENEXR_INSTALL_EXAMPLES=OFF -DOPENEXR_INSTALL_TOOLS=OFF -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" .
 
 ninja
 ninja install
 
-if ($IsWindows) {
-    $env:OpenEXR_DIR = "$PWD\installed\lib\cmake\OpenEXR"
-    $env:Imath_DIR = "$PWD\installed\lib\cmake\Imath"
-}
+$env:OpenEXR_DIR = "$PWD/installed/lib/cmake/OpenEXR"
+$env:Imath_DIR = "$PWD/installed/lib/cmake/Imath"
 
 cd ../
