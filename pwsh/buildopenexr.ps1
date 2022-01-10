@@ -3,7 +3,7 @@ cd openexr
 git checkout v3.1.0
 
 if ($IsWindows) {
-    if ([Environment]::Is64BitOperatingSystem) {
+    if ([Environment]::Is64BitOperatingSystem -and ($env:forceWin32 -ne 'true')) {
         $env:VCPKG_DEFAULT_TRIPLET = "x64-windows"
     }
 

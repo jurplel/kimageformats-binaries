@@ -6,7 +6,7 @@ cd karchive
 git checkout $(git describe --abbrev=0).substring(0, 7)
 
 if ($IsWindows) {
-    if ([Environment]::Is64BitOperatingSystem) {
+    if ([Environment]::Is64BitOperatingSystem -and ($env:forceWin32 -ne 'true')) {
         $env:VCPKG_DEFAULT_TRIPLET = "x64-windows"
     }
     

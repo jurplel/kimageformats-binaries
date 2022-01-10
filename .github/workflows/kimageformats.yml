@@ -28,7 +28,6 @@ jobs:
         with:
           version: ${{ matrix.vers }}
           arch: ${{ matrix.forceWin32 != 'true' && 'win64_msvc2019_64' || 'win32_msvc2019' }}
-          
 
       - name: Restore from cache and install vcpkg
       # Download and build vcpkg, without installing any port. If content is cached already, it is a no-op.
