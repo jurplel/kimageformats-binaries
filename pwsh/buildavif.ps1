@@ -67,15 +67,18 @@ if ($IsWindows) {
     mkdir build
     cd build
 
+    $env:CFLAGS = "-arch x86_64 -arch arm64"
     meson --default-library=static --buildtype release ..
+    Remove-Item Env:\CFLAGS
+
     ninja
 
     cd ../../../
 
     echo 'We are going to build libavif.a'
-    mkdir build
-    cd build
-    cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DAVIF_CODEC_DAV1D=ON -DAVIF_LOCAL_DAV1D=ON -DAVIF_LOCAL_LIBYUV=ON -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"  ..
+    mkdir build-ro
+    cd build-ro
+    cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DAVIF_CODEC_DAV1D=ON -DAVIF_LOCAL_DAV1D=ON -DAVIF_LOCAL_LIBYUV=ON -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" ..
     ninja
 
     cd ../../../
