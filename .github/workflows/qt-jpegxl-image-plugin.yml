@@ -13,9 +13,6 @@ jobs:
         vers: ['5.15.2']
         forceWin32: ['false']
         include:
-          - os: windows-2019
-            vers: '5.15.2'
-            forceWin32: 'true'
           - os: macos-10.15
             vers: '6.2.1'
             forceWin32: 'false'
