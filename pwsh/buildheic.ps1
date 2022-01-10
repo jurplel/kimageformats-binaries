@@ -38,5 +38,5 @@ if ($IsWindows) {
 
 # Copy libheif stuff to output (It's not compiled statically I guess?)
 if ($IsWindows) {
-    cp ../3rdparty/install/bin/*.dll  bin/
+    cp ../3rdparty/install/bin/*.dll  plugins/
 }

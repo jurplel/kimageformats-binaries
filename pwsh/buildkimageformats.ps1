@@ -20,8 +20,8 @@ if ($IsWindows) {
     sudo apt-get install ninja-build
 }
 
-& "$env:GITHUB_WORKSPACE/pwsh/buildkarchive.ps1"
 & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1" $kde_vers
+& "$env:GITHUB_WORKSPACE/pwsh/buildkarchive.ps1"
 
 
 # Build kimageformats
