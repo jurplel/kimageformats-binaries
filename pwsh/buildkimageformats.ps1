@@ -12,7 +12,7 @@ git checkout $kde_vers
 # dependencies
 if ($IsWindows) {
     & "$env:GITHUB_WORKSPACE/pwsh/vcvars.ps1"
-    choco install ninja
+    choco install ninja pkgconfiglite
 } elseif ($IsMacOS) {
     brew update
     brew install ninja

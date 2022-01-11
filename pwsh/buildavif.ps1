@@ -110,7 +110,7 @@ if ($IsWindows) {
     echo 'We are going to build libavif.a'
     mkdir build-ro
     cd build-ro
-    if ((qmake --version -split '\n')[1][17] -eq '6') {
+    if ($IsMacOS -and ((qmake --version -split '\n')[1][17] -eq '6')) {
         cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DAVIF_CODEC_DAV1D=ON -DAVIF_LOCAL_DAV1D=ON -DAVIF_LOCAL_LIBYUV=ON -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" ..
     } else {
         cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DAVIF_CODEC_DAV1D=ON -DAVIF_LOCAL_DAV1D=ON -DAVIF_LOCAL_LIBYUV=ON ..
@@ -122,6 +122,10 @@ if ($IsWindows) {
     echo 'We are going to build qt-avif-image-plugin'
     cd qtbuild_5.15.2-ro
     
-    qmake QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64" .
+    if ($IsMacOS -and ((qmake --version -split '\n')[1][17] -eq '6')) {
+        qmake QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64" .
+    } else {
+        qmake .
+    }
     make
 }

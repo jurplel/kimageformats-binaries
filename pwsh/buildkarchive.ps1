@@ -20,15 +20,16 @@ if ($IsWindows) {
 
 # don't use homebrew zlib/zstd so we can make universal binary
 if ($IsMacOS) {
-    brew deps zlib | xargs brew remove --ignore-dependencies
-    brew deps zstd | xargs brew remove --ignore-dependencies
-
-    brew uninstall zlib
-    brew uninstall zstd
+    brew uninstall --ignore-dependencies zlib
+    brew uninstall --ignore-dependencies zstd
 }
 
 # Build
-cmake -G Ninja -DCMAKE_INSTALL_PREFIX="$PWD/installed/" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" -DBUILD_WITH_QT6=ON .
+if ((qmake --version -split '\n')[1][17] -eq '6') {
+    cmake -G Ninja -DCMAKE_INSTALL_PREFIX="$PWD/installed/" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" -DBUILD_WITH_QT6=ON .
+} else {
+    cmake -G Ninja -DCMAKE_INSTALL_PREFIX="$PWD/installed/" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" .
+}
 
 ninja
 ninja install
