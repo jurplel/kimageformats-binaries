@@ -38,11 +38,11 @@ ninja
 if ($IsWindows) {
     cp karchive/bin/*.dll  bin/
 } elseif ($IsMacOS) {
-    cp karchive/bin/libKF5Archive.dylib  bin/
+    cp karchive/bin/*.dylib  bin/
 
-    cp libjxl/installed/lib/libjxl.dylib  bin/
-    cp libjxl/installed/lib/libjxl_threads.dylib  bin/
+    cp libjxl/installed/lib/*.dylib  bin/
+    cp libjxl/installed/lib/*.dylib  bin/
 
-    cp openexr/installed/lib/libOpenEXR.dylib  bin/
-    cp openexr/installed/lib/libImath.dylib  bin/
+    cp openexr/installed/lib/*.dylib  bin/
+    cp openexr/installed/lib/*.dylib  bin/
 }
