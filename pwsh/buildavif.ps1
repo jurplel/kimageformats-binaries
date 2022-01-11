@@ -66,7 +66,7 @@ if ($IsWindows) {
     cd ext/dav1d
 
 
-    if ($IsMacOS) {
+    if ($IsMacOS -and ((qmake --version -split '\n')[1][17] -eq '6')) {
         # arm64 cross build
         mkdir build-arm64
         cd build-arm64
