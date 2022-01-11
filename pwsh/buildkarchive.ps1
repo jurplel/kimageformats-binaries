@@ -19,7 +19,7 @@ if ($IsWindows) {
 }
 
 if ($IsMacOS) {
-    brew uninstall zlib # don't use system zlib so we can make universal binary
+    brew uninstall zlib zstd # don't use system zlib so we can make universal binary
 }
 
 # Build
