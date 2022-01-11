@@ -114,7 +114,7 @@ if ($IsWindows) {
     cd ../../../
     
     echo 'We are going to build qt-avif-image-plugin'
-    cd qtbuild_6.2.2-ro
+    cd qtbuild_5.15.2-ro
     
     qmake QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64" .
     make
