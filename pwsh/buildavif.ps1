@@ -64,14 +64,44 @@ if ($IsWindows) {
 
     echo 'We are going to build libdav1d.a'
     cd ext/dav1d
-    mkdir build
-    cd build
 
-    $env:CFLAGS = "-arch x86_64 -arch arm64"
-    meson --default-library=static --buildtype release ..
-    Remove-Item Env:\CFLAGS
 
-    ninja
+    if ($IsMacOS) {
+        # arm64 cross build
+        mkdir build-arm64
+        cd build-arm64
+
+        $env:CFLAGS="-arch arm64"
+        meson --default-library=static --buildtype release --cross-file="$env:GITHUB_WORKSPACE/util/arm64-darwin-clang.meson" -Denable_tools=false -Denable_tests=false ..
+        $env:CFLAGS=""
+        ninja
+
+        cd ..
+
+        # x86_64 build
+        mkdir build-x86_64
+        cd build-x86_64
+
+        meson --default-library=static --buildtype release -Denable_tools=false -Denable_tests=false ..
+        ninja
+
+        # combine to create universal binary
+        mkdir build
+        cd build
+        mkdir src
+        cd src
+        lipo -create ../../build-arm64/src/libdav1d.a ../../build-x86_64/src/libdav1d.a -output libdav1d.a
+
+        cd ../
+
+        cp -r ../build-x86_64/include include/
+
+    } else {
+        mkdir build
+        cd build
+        meson --default-library=static --buildtype release -Denable_tools=false -Denable_tests=false ..
+        ninja
+    }
 
     cd ../../../
 
