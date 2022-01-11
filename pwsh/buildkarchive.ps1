@@ -34,6 +34,10 @@ if ((qmake --version -split '\n')[1][17] -eq '6') {
 ninja
 ninja install
 
-$env:KF5Archive_DIR = "$PWD/installed/lib/cmake/KF5Archive"
+cd installed/
+
+$env:KF5Archive_DIR = Split-Path -Path (Get-Childitem -Include KF5ArchiveConfig.cmake -Recurse -ErrorAction SilentlyContinue)[0]
+
+cd ../
 
 cd ../

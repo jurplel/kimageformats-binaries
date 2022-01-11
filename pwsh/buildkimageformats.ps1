@@ -48,4 +48,10 @@ if ($IsWindows) {
     cp libjxl/installed/lib/*.dylib  bin/
 
     cp openexr/installed/lib/*.dylib  bin/
+} else {
+    cp karchive/installed/lib/* bin/
+
+    cp libjxl/installed/lib/*  bin/
+
+    cp openexr/installed/lib/*  bin/
 }

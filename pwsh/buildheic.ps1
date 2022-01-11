@@ -37,11 +37,16 @@ if ($IsWindows) {
     $currentDir = ([string]$PWD).Replace('\', '/')
     qmake QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64" QMAKE_LIBDIR=3rdparty/install/lib/ "INCLUDEPATH += $currentDir/3rdparty/install/include/" qt-heic-image-plugin.pro
     make
+    mv plugins/ qtbuild_5.15.2/plugins
+    cd qtbuild_5.15.2/
 }
 
 # Copy libheif stuff to output (It's not compiled statically I guess?)
 if ($IsWindows) {
     cp ../3rdparty/install/bin/*.dll  plugins/
 } elseif ($IsMacOS) {
-    cp 3rdparty/lib/*.dylib plugins/
+    # is this broken? idk
+    cp ../3rdparty/lib/*.dylib plugins/
+} else {
+    cp ../3rdparty/install/lib/* plugins/
 }
