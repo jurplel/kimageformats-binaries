@@ -18,8 +18,13 @@ if ($IsWindows) {
     & "$env:GITHUB_WORKSPACE\pwsh\vcvars.ps1"
 }
 
+# don't use homebrew zlib/zstd so we can make universal binary
 if ($IsMacOS) {
-    brew uninstall zlib zstd # don't use system zlib so we can make universal binary
+    brew deps zlib | xargs brew remove --ignore-dependencies
+    brew deps zstd | xargs brew remove --ignore-dependencies
+
+    brew uninstall zlib
+    brew uninstall zstd
 }
 
 # Build
