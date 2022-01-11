@@ -18,6 +18,10 @@ if ($IsWindows) {
     & "$env:GITHUB_WORKSPACE\pwsh\vcvars.ps1"
 }
 
+if ($IsMacOS) {
+    brew uninstall zlib # don't use system zlib so we can make universal binary
+}
+
 # Build
 cmake -G Ninja -DCMAKE_INSTALL_PREFIX="$PWD/installed/" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" -DBUILD_WITH_QT6=ON .
 

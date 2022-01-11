@@ -85,6 +85,8 @@ if ($IsWindows) {
         meson --default-library=static --buildtype release -Denable_tools=false -Denable_tests=false ..
         ninja
 
+        cd ..
+
         # combine to create universal binary
         mkdir build
         cd build
