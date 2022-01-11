@@ -37,12 +37,15 @@ ninja
 # Copy stuff to output
 if ($IsWindows) {
     cp karchive/bin/*.dll  bin/
+
+    cp libjxl/installed/bin/*.dll bin/
+    cp libjxl/build/third_party/brotli/*.dll bin/
+
+    cp openexr/installed/bin/*.dll bin/
 } elseif ($IsMacOS) {
     cp karchive/bin/*.dylib  bin/
 
     cp libjxl/installed/lib/*.dylib  bin/
-    cp libjxl/installed/lib/*.dylib  bin/
 
-    cp openexr/installed/lib/*.dylib  bin/
     cp openexr/installed/lib/*.dylib  bin/
 }
