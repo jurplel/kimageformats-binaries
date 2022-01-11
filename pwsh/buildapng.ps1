@@ -1,9 +1,9 @@
 #! /usr/bin/pwsh
 
 # Clone
-git clone https://github.com/Skycoder42/QtApng
+git clone https://github.com/jurplel/QtApng.git
 cd QtApng
-git checkout $(git tag | select -last 1)
+git checkout 31bdace25eee2c35a351008c3886823f65e39447
 
 
 
