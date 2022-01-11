@@ -27,7 +27,7 @@ if ($IsWindows) {
 
 # Build kimageformats
 
-if ((qmake --version -split '\n')[1][17] == '6') {
+if ((qmake --version -split '\n')[1][17] -eq '6') {
     cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DKIMAGEFORMATS_JXL=ON -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" -DBUILD_WITH_QT6=ON .
 } else {
     cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DKIMAGEFORMATS_JXL=ON -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" .
