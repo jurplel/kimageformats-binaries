@@ -49,7 +49,8 @@ if ($IsWindows) {
 
     cp openexr/installed/lib/*.dylib  bin/
 } else {
-    cp $env:KF5Archive_DIR/../* bin/
+    $env:KF5LibLoc = Split-Path -Path (Get-Childitem -Include libKF5Archive.so.5 -Recurse -ErrorAction SilentlyContinue)[0]
+    cp $env:KF5LibLoc/* bin/
 
     cp libjxl/installed/lib/*  bin/
     cp libjxl/build/third_party/brotli/* bin/
