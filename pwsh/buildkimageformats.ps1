@@ -52,6 +52,7 @@ if ($IsWindows) {
     cp karchive/installed/lib/* bin/
 
     cp libjxl/installed/lib/*  bin/
+    cp libjxl/build/third_party/brotli/* bin/
 
     cp openexr/installed/lib/*  bin/
 }
