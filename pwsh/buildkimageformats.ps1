@@ -49,7 +49,7 @@ if ($IsWindows) {
 
     cp openexr/installed/lib/*.dylib  bin/
 } else {
-    cp karchive/installed/lib/* bin/
+    cp $env:KF5Archive_DIR/../* bin/
 
     cp libjxl/installed/lib/*  bin/
     cp libjxl/build/third_party/brotli/* bin/
