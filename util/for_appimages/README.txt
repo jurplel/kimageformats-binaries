@@ -1,0 +1,1 @@
+When manually modifying appimages, there are some RPATH issues. These scripts quickly and easily reset all the RPATHs to their proper values in their respective folders.
