@@ -3,7 +3,7 @@
 # Clone
 git clone https://invent.kde.org/frameworks/karchive.git
 cd karchive
-git checkout $(git describe --abbrev=0).substring(0, 7)
+git checkout $args[0]
 
 if ($IsWindows) {
     if ([Environment]::Is64BitOperatingSystem -and ($env:forceWin32 -ne 'true')) {
