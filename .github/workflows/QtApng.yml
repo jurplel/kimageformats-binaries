@@ -16,7 +16,7 @@ jobs:
           - os: windows-2019
             vers: '5.15.2'
             forceWin32: 'true'
-          - os: macos-11
+          - os: macos-latest
             vers: '6.2.2'
             forceWin32: 'false'
 
