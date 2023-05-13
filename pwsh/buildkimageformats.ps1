@@ -1,6 +1,6 @@
 #! /usr/bin/pwsh
 
-$kde_vers = 'v5.90.0'
+$kde_vers = 'v5.105.0'
 
 # Clone
 git clone https://invent.kde.org/frameworks/kimageformats.git
