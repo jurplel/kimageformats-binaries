@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
-      matrix:
+      matrix: 
         os: [ubuntu-20.04, macos-latest, windows-2019]
         vers: ['5.15.2']
         forceWin32: ['false']
