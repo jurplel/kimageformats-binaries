@@ -9,13 +9,16 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix: 
-        os: [ubuntu-20.04, macos-latest, windows-2019]
+        os: [ubuntu-20.04, macos-latest]
         vers: ['5.15.2']
         forceWin32: ['false']
         include:
           - os: windows-2019
             vers: '5.15.2'
             forceWin32: 'true'
+          - os: windows-2019
+            vers: '6.2.2'
+            forceWin32: 'false'
           - os: macos-latest
             vers: '6.2.2'
             forceWin32: 'false'
