@@ -19,7 +19,7 @@ jobs:
           - os: windows-2019
             vers: '6.2.2'
             forceWin32: 'false'
-            arch: 'win32_msvc2019'
+            arch: 'win64_msvc2019_64'
           - os: macos-latest
             vers: '6.2.2'
             forceWin32: 'false'

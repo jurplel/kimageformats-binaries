@@ -15,11 +15,11 @@ jobs:
           - os: windows-2019
             vers: '5.15.2'
             forceWin32: 'true'
-            arch: 'win64_msvc2019_64'
+            arch: 'win32_msvc2019'
           - os: windows-2019
             vers: '6.2.2'
             forceWin32: 'false'
-            arch: 'win32_msvc2019'
+            arch: 'win64_msvc2019_64'
 
     steps:
       - uses: actions/checkout@v2
