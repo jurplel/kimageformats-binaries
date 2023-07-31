@@ -38,5 +38,5 @@ jobs:
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v2
         with:
-          name: qtheic-${{ github.run_number }}-${{ matrix.os }}-${{ matrix.vers }}-${{ matrix.forceWin32 }}
+          name: qtheic-${{ github.run_number }}-${{ matrix.os }}-${{ matrix.vers }}-${{ matrix.arch && matrix.arch || 'none' }}
           path: ${{ github.workspace }}/qt-heic-image-plugin/qtbuild_5.15.2/plugins/
