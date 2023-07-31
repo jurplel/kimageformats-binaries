@@ -42,5 +42,5 @@ jobs:
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v2
         with:
-          name: qtavif-${{ github.run_number }}-${{ matrix.os }}-${{ matrix.vers }}-${{ matrix.arch && matrix.arch || 'none' }}
+          name: qtavif-${{ github.run_number }}-${{ matrix.os }}-${{ matrix.vers }}${{ matrix.arch && format('-{0}', matrix.arch) || '' }}
           path: ${{ github.workspace }}/qt-avif-image-plugin/qtbuild_5.15.2-ro/plugins/
