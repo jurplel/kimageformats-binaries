@@ -11,14 +11,15 @@ jobs:
       matrix:
         os: [ubuntu-20.04]
         vers: ['5.15.2']
-        forceWin32: ['false']
         include:
           - os: windows-2019
             vers: '5.15.2'
             forceWin32: 'true'
+            arch: 'win64_msvc2019_64'
           - os: windows-2019
             vers: '6.2.2'
             forceWin32: 'false'
+            arch: 'win32_msvc2019'
 
     steps:
       - uses: actions/checkout@v2
@@ -27,7 +28,7 @@ jobs:
         uses: jurplel/install-qt-action@v3
         with:
           version: ${{ matrix.vers }}
-          arch: ${{ matrix.forceWin32 != 'true' && 'win64_msvc2019_64' || 'win32_msvc2019' }}
+          arch: ${{ matrix.arch }}
 
       - name: Build qt-heic-image-plugin
         run: pwsh pwsh/buildheic.ps1
