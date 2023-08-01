@@ -35,8 +35,15 @@ jobs:
         env:
           forceWin32: ${{ matrix.forceWin32 }}
 
-      - name: 'Upload Artifact'
-        uses: actions/upload-artifact@v2
+      - name: 'Zip Artifact'
+        uses: thedoctor0/zip-release@0.7.1
         with:
-          name: qtheic-${{ github.run_number }}-${{ matrix.os }}-${{ matrix.vers }}${{ matrix.arch && format('-{0}', matrix.arch) || '' }}
-          path: ${{ github.workspace }}/qt-heic-image-plugin/qtbuild_5.15.2/plugins/
+          type: 'zip'
+          path: qt-heic-image-plugin/qtbuild_5.15.2/plugins/
+          filename: 'qtheic-${{ matrix.os }}-${{ matrix.vers }}${{ matrix.arch && format('-{0}', matrix.arch) || '' }}.zip'
+      - name: 'Upload to continous release'
+        uses: softprops/action-gh-release@v1
+        tag_name: 'cont'
+        with:
+          files:  qtheic-*.zip
+
