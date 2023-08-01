@@ -41,6 +41,7 @@ jobs:
           type: 'zip'
           path: qt-heic-image-plugin/qtbuild_5.15.2/plugins/
           filename: 'qtheic-${{ matrix.os }}-${{ matrix.vers }}${{ matrix.arch && format('-{0}', matrix.arch) || '' }}.zip'
+
       - name: 'Upload to continous release'
         uses: softprops/action-gh-release@v1
         tag_name: 'cont'
