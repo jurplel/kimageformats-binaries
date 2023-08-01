@@ -54,6 +54,6 @@ jobs:
 
       - name: 'Upload to continous release'
         uses: softprops/action-gh-release@v1
-        tag_name: 'cont'
         with:
+          tag_name: 'cont'
           files:  kimageformats-*.zip
