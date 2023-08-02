@@ -33,12 +33,12 @@ jobs:
           version: ${{ matrix.vers }}
           arch: ${{ matrix.arch }}
 
-      - name: Restore from cache and install vcpkg
+
       # Download and build vcpkg, without installing any port. If content is cached already, it is a no-op.
-        uses: lukka/run-vcpkg@v7
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@v11
         with:
-          setupOnly: true
-          vcpkgGitCommitId: 'c2e8ba09ce99ae9b3f5c720bbe93da860575193e'
+          vcpkgGitCommitId: '980ec0f49d81f794778386f7bd518b2cc9c092f0'
 
       - name: Build KImageFormats (just one big step for now)
         run: pwsh pwsh/buildkimageformats.ps1
