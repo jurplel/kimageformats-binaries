@@ -21,11 +21,11 @@ if ($IsWindows) {
 }
 
 & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1" $kde_vers
+& "$env:GITHUB_WORKSPACE/pwsh/get-vcpkg-deps.ps1"
 & "$env:GITHUB_WORKSPACE/pwsh/buildkarchive.ps1" $kde_vers
-& "$env:GITHUB_WORKSPACE/pwsh/get-vcpkg-deps.ps1" $kde_vers
 
 # Build kimageformats
-cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/installed" -DKIMAGEFORMATS_JXL=ON -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" .
+cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/installed" -DKIMAGEFORMATS_JXL=ON -DKIMAGEFORMATS_HEIF=ON -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" .
 
 ninja
 ninja install
@@ -35,27 +35,28 @@ if ($IsMacOS) {
     rm -rf CMakeFiles/
     rm -rf CMakeCache.txt
 
-    cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/installed_arm64" -DKIMAGEFORMATS_JXL=ON-DKIMAGEFORMATS_HEIF=ON -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET="arm64-osx" -DCMAKE_OSX_ARCHITECTURES="arm64" .
+    cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/installed_arm64" -DKIMAGEFORMATS_JXL=ON -DKIMAGEFORMATS_HEIF=ON -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET="arm64-osx" -DCMAKE_OSX_ARCHITECTURES="arm64" .
 
     ninja
     ninja install
-}
 
 # Lipo stuff TODO
-mkdir -p installed_univ/
+    mkdir -p installed_univ/
 
-$prefix = "installed"
-$prefix_arm = "installed_arm64/"
-$prefix_out = "installed_univ/"
+    $prefix = "installed"
+    $prefix_arm = "installed_arm64/"
+    $prefix_out = "installed_univ/"
 
-$files = Get-ChildItem "$prefix" -Recurse -Filter *.so # dylib? TODO
-foreach ($file in $files) {
-    Write-Host $file
-    # $name = $file.Name
-    # lipo -create "$file" "$prefix2/$name" -output "universal/lib/$name"
-    # lipo -info "universal/lib/$name"
-    lipo -info "$file"
+    $files = Get-ChildItem "$prefix" -Recurse -Filter *.so # dylib? TODO
+    foreach ($file in $files) {
+        Write-Host $file
+        # $name = $file.Name
+        # lipo -create "$file" "$prefix2/$name" -output "universal/lib/$name"
+        # lipo -info "universal/lib/$name"
+        lipo -info "$file"
+    }
 }
+
 
 
 # Copy stuff to output

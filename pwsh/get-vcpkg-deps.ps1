@@ -3,12 +3,16 @@
 # Install vcpkg if we don't already have it
 if ($env:VCPKG_ROOT -eq $null) {
   git clone https://github.com/microsoft/vcpkg
-  if ($IsWindows) {
-      vcpkg/bootstrap-vcpkg.bat
-  } else {
-      vcpkg/bootstrap-vcpkg.sh
-  }
   $env:VCPKG_ROOT = "$PWD/vcpkg/"
+}
+
+git -C $env:VCPKG_ROOT pull
+
+# Bootstrap VCPKG again
+if ($IsWindows) {
+    & "$env:VCPKG_ROOT/bootstrap-vcpkg.bat"
+} else {
+    & "$env:VCPKG_ROOT/bootstrap-vcpkg.sh"
 }
 
 if ($IsWindows) {
@@ -29,11 +33,11 @@ if ($IsWindows) {
 } else {
     $vcpkgexec = "vcpkg"
 }
-& "$env:VCPKG_ROOT/$vcpkgexec" install --keep-going libjxl libheif libavif openexr libraw
+& "$env:VCPKG_ROOT/$vcpkgexec" install --keep-going libjxl libheif libavif openexr libraw zlib
 
 
 # Build m1 guys and combine them to get universal binaries from this
 if ($IsMacOS) {
-    & "$env:VCPKG_ROOT/$vcpkgexec" install --keep-going libjxl:arm64-osx libheif:arm64-osx libavif:arm64-osx openexr:arm64-osx libraw:arm64-osx
+    & "$env:VCPKG_ROOT/$vcpkgexec" install --keep-going libjxl:arm64-osx libheif:arm64-osx libavif:arm64-osx openexr:arm64-osx libraw:arm64-osx zlib:arm64-osx
 }
 
