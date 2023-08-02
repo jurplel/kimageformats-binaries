@@ -20,7 +20,8 @@ if ($IsWindows) {
 } elseif ($IsMacOS) {
     brew install nasm
 } else {
-    sudo apt-get install nasm
+    # (and bonus dependencies)
+    sudo apt-get install nasm libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev
 }
 
 if ($IsWindows) {
