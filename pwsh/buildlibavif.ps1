@@ -2,7 +2,6 @@
 
 if (-Not (Get-Command meson)) {
     python -m pip install meson
-    Set-Alias -Name meson -Value "python -m meson"
 }
 
 if ($IsWindows) {
