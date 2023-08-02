@@ -18,6 +18,20 @@ git clone https://github.com/AOMediaCodec/libavif.git
 cd libavif
 git checkout v0.11.1
 
+cd ext
+
+# Build libyuv
+git clone --single-branch https://chromium.googlesource.com/libyuv/libyuv
+cd libyuv
+git checkout 464c51a0
+
+mkdir build
+cd build
+cmake -G Ninja -DBUILD_SHARED_LIBS=0 -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" ..
+ninja
+
+cd ../../
+
 # Build dav1d
 cd ext
 
@@ -28,11 +42,9 @@ cd dav1d
 if ($IsWindows) {
     wget https://www.nasm.us/pub/nasm/releasebuilds/2.14/win64/nasm-2.14-win64.zip
     7z e -y nasm-2.14-win64.zip
-    mkdir build
-    cd build
-    meson --default-library=static --buildtype release ..
-    ninja
-} elseif ($IsMacOS) {
+}
+
+if ($IsMacOS) {
     # arm64 cross build
     mkdir build-arm64
     cd build-arm64
@@ -64,6 +76,7 @@ if ($IsWindows) {
 
     cp -r ../build-x86_64/include include/
 } else {
+    # Just a normal build
     mkdir build
     cd build
     meson --default-library=static --buildtype release -Denable_tools=false -Denable_tests=false ..
