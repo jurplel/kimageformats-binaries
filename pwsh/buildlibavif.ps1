@@ -18,11 +18,6 @@ git clone https://github.com/AOMediaCodec/libavif.git
 cd libavif
 git checkout v0.11.1
 
-# vcvars on windows
-if ($IsWindows) {
-    & "$env:GITHUB_WORKSPACE/pwsh/vcvars.ps1"
-}
-
 # Build dav1d
 cd ext
 

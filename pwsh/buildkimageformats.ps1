@@ -61,6 +61,8 @@ if ($IsWindows) {
     cp libjxl/installed/lib/*  bin/
     cp libjxl/build/third_party/brotli/* bin/
 
+    # TODO: Possibly wrong
+    cp libavif/build/installed/usr/local/lib/*.dll bin/
     cp libavif/build/installed/usr/local/lib/* bin/
 
     cp openexr/installed/lib/*  bin/

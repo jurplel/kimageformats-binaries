@@ -10,6 +10,7 @@ if ($IsWindows) {
         $env:VCPKG_DEFAULT_TRIPLET = "x64-windows"
     }
     
+    git -C "$env:VCPKG_ROOT" pull
     & "$env:VCPKG_ROOT/vcpkg.exe" install zlib
 }
 
