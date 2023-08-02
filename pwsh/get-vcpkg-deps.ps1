@@ -13,6 +13,16 @@ if ($IsWindows) {
     & "$env:VCPKG_ROOT/bootstrap-vcpkg.sh"
 }
 
+# Install NASM
+if ($IsWindows) {
+    & "$env:GITHUB_WORKSPACE/pwsh/vcvars.ps1"
+    choco install nasm
+} elseif ($IsMacOS) {
+    brew install nasm
+} else {
+    sudo apt-get install nasm
+}
+
 if ($IsWindows) {
     & "$env:GITHUB_WORKSPACE\pwsh\vcvars.ps1"
     
