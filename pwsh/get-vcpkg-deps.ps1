@@ -36,6 +36,6 @@ if ($IsWindows) {
 
 # Build m1 guys and combine them to get universal binaries from this
 if ($IsMacOS) {
-    & "$env:VCPKG_ROOT/$vcpkgexec" install --keep-going libjxl:arm64-osx libheif:arm64-osx libavif:arm64-osx openexr:arm64-osx libraw:arm64-osx zlib:arm64-osx
+    & "$env:VCPKG_ROOT/$vcpkgexec" install --keep-going libjxl:arm64-osx libavif:arm64-osx openexr:arm64-osx libraw:arm64-osx zlib:arm64-osx
 }
 
