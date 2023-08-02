@@ -12,5 +12,10 @@ if ($IsWindows) {
 
 
 # Build using vcpkg
-& "$env:VCPKG_ROOT/vcpkg.exe" --overlay-triplets=util/ install openexr
+if ($IsWindows) {
+    $vcpkgexec = "vcpkg.exe"
+} else {
+    $vcpkgexec = "vcpkg"
+}
+& "$env:VCPKG_ROOT/$vcpkgexec" --overlay-triplets=util/ install openexr
 
