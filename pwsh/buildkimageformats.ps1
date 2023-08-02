@@ -23,6 +23,7 @@ if ($IsWindows) {
 & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1" $kde_vers
 & "$env:GITHUB_WORKSPACE/pwsh/buildkarchive.ps1" $kde_vers
 & "$env:GITHUB_WORKSPACE/pwsh/buildlibjxl.ps1"
+& "$env:GITHUB_WORKSPACE/pwsh/buildlibavif.ps1"
 & "$env:GITHUB_WORKSPACE/pwsh/buildopenexr.ps1"
 
 # Build kimageformats
@@ -41,11 +42,16 @@ if ($IsWindows) {
     cp libjxl/installed/bin/*.dll bin/
     cp libjxl/build/third_party/brotli/*.dll bin/
 
+    # TODO: Probably wrong
+    cp libavif/build/installed/usr/local/lib/*.dll bin/
+
     cp openexr/installed/bin/*.dll bin/
 } elseif ($IsMacOS) {
     cp karchive/bin/*.dylib  bin/
 
     cp libjxl/installed/lib/*.dylib  bin/
+
+    cp libavif/build/installed/usr/local/lib/*.dylib bin/
 
     cp openexr/installed/lib/*.dylib  bin/
 } else {
@@ -54,6 +60,8 @@ if ($IsWindows) {
 
     cp libjxl/installed/lib/*  bin/
     cp libjxl/build/third_party/brotli/* bin/
+
+    cp libavif/build/installed/usr/local/lib/* bin/
 
     cp openexr/installed/lib/*  bin/
 }

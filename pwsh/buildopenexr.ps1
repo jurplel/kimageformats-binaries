@@ -1,3 +1,5 @@
+#!/usr/bin/env pwsh
+
 git clone https://github.com/AcademySoftwareFoundation/openexr.git
 cd openexr
 git checkout v3.1.3
@@ -25,3 +27,4 @@ $env:OpenEXR_DIR = "$PWD/installed/lib/cmake/OpenEXR"
 $env:Imath_DIR = "$PWD/installed/lib/cmake/Imath"
 
 cd ../
+

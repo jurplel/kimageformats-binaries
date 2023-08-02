@@ -1,4 +1,4 @@
-#! /usr/bin/pwsh
+#!/usr/bin/env pwsh
 
 # Clone
 git clone https://github.com/jurplel/QtApng.git

@@ -1,4 +1,4 @@
-#! /usr/bin/pwsh
+#!/usr/bin/env pwsh
 
 # Clone
 git clone --depth 1 https://github.com/novomesk/qt-heic-image-plugin.git

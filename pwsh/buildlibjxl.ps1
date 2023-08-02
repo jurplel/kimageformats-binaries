@@ -1,4 +1,4 @@
-#! /usr/bin/pwsh
+#!/usr/bin/env pwsh
 
 if ($IsWindows) {
     & "$env:GITHUB_WORKSPACE/pwsh/vcvars.ps1"
