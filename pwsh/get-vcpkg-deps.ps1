@@ -6,7 +6,8 @@ if ($env:VCPKG_ROOT -eq $null) {
   $env:VCPKG_ROOT = "$PWD/vcpkg/"
 }
 
-git -C $env:VCPKG_ROOT pull
+git -C $env:VCPKG_ROOT pull master
+git -C $env:VCPKG_ROOT checkout 980ec0f
 
 # Bootstrap VCPKG again
 if ($IsWindows) {
