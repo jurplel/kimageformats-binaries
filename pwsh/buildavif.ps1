@@ -6,9 +6,9 @@ if ($IsWindows) {
     & "$env:GITHUB_WORKSPACE/pwsh/vcvars.ps1"
     choco install ninja wget
 } elseif ($IsMacOS) {
-    brew install ninja
+    brew install ninja nasm
 } else {
-    sudo apt-get install ninja-build
+    sudo apt-get install ninja-build nasm
 }
 
 # Clone
@@ -47,11 +47,6 @@ if ($IsWindows) {
     qmake qt-avif-image-plugin_local_alternative-libavif-ro.pro
     nmake
 } else {
-    brew install nasm
-    if (!$IsMacOS) {
-        $env:PKG_CONFIG_PATH += ":/home/linuxbrew/.linuxbrew/lib/pkgconfig"
-    }
-
     echo 'We are going to build libyuv.a'
     cd ext/libavif/ext/libyuv
     mkdir build
