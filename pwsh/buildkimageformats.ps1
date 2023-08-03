@@ -35,8 +35,10 @@ if ($IsMacOS) {
 }
 if ((qmake --version -split '\n')[1][17] -eq '6') {
     $qt6 = "ON"
+    Write-Host "Building with Qt6"
 } else {
     $qt6 = "OFF"
+    Write-Host "Building with Qt5"
 }
 
 # (Try to) resolve pthread error
