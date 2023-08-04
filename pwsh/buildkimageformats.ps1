@@ -51,7 +51,7 @@ ninja
 ninja install
 
 # Build arm64 version as well and macos and lipo them together
-if ($IsMacOS) {
+if ($env:universalBinary) {
     rm -rf CMakeFiles/
     rm -rf CMakeCache.txt
 
