@@ -42,6 +42,9 @@ if ((qmake --version -split '\n')[1][17] -eq '6') {
 # (Try to) resolve pthread error
 $env:CMAKE_CXX_FLAGS += ' -pthread'
 
+Write-Host "Query qmake"
+qmake -query
+
 # Build kimageformats
 cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/installed" -DKIMAGEFORMATS_JXL=ON -DKIMAGEFORMATS_HEIF=$heifOn -DBUILD_WITH_QT6=$qt6 -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" .
 
