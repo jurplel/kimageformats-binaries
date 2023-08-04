@@ -11,7 +11,7 @@ if ($IsWindows) {
 }
 
 # Build
-cmake -G Ninja -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" .
+cmake -G Ninja . #-DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
 
 if ($IsWindows) {
     ninja install
