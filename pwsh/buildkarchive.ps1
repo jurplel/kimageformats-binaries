@@ -9,13 +9,7 @@ if ($IsWindows) {
     if ([Environment]::Is64BitOperatingSystem -and ($env:forceWin32 -ne 'true')) {
         $env:VCPKG_DEFAULT_TRIPLET = "x64-windows"
     }
-    
-    git -C "$env:VCPKG_ROOT" pull
-    & "$env:VCPKG_ROOT/vcpkg.exe" install zlib
-}
-
-# vcvars on windows
-if ($IsWindows) {   
+    # vcvars on windows
     & "$env:GITHUB_WORKSPACE\pwsh\vcvars.ps1"
 }
 
@@ -40,11 +34,11 @@ ninja
 ninja install
 
 try {
-    cd installed/
+    cd installed/ -ErrorAction Stop
 
     $env:KF5Archive_DIR = Split-Path -Path (Get-Childitem -Include KF5ArchiveConfig.cmake -Recurse -ErrorAction SilentlyContinue)[0]
 
     cd ../
-} catch { "Failed to cd installed/ after karchive (build probably failed)"}
+} catch {}
 
 cd ../
