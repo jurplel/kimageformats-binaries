@@ -41,6 +41,6 @@ try {
     $env:KF5Archive_DIR = Split-Path -Path (Get-Childitem -Include KF5ArchiveConfig.cmake -Recurse -ErrorAction SilentlyContinue)[0]
 
     cd ../
-}
+} catch { "Failed to cd installed/ after karchive (build probably failed D:)"}
 
 cd ../
