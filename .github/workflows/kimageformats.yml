@@ -40,7 +40,6 @@ jobs:
         uses: lukka/run-vcpkg@v11
         with:
           vcpkgGitCommitId: '980ec0f49d81f794778386f7bd518b2cc9c092f0'
-          doNotCache: true
 
       - name: Build KImageFormats (just one big step for now)
         run: pwsh pwsh/buildkimageformats.ps1

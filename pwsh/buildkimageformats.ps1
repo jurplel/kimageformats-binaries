@@ -39,11 +39,13 @@ if ((qmake --version -split '\n')[1][17] -eq '6') {
     $qt6flag = "-DBUILD_WITH_QT6=ON"
 }
 
-# (Try to) resolve pthread error
-$env:CXXFLAGS += ' -pthread'
+# Resolve pthread error on linux
+if (-Not $IsWindows) {
+    $env:CXXFLAGS += ' -pthread'
+}
 
 # Build kimageformats
-cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/installed" -DKIMAGEFORMATS_JXL=ON -DKIMAGEFORMATS_HEIF=$heifOn $qt6flag -DVCPKG_TARGET_TRIPLET="x64-osx" -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" .
+cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/installed" -DKIMAGEFORMATS_JXL=ON -DKIMAGEFORMATS_HEIF=$heifOn $qt6flag -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" .
 
 ninja
 ninja install
