@@ -20,6 +20,7 @@ if ($IsWindows) {
     sudo apt-get install ninja-build
 }
 
+
 & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1" $kde_vers
 & "$env:GITHUB_WORKSPACE/pwsh/get-vcpkg-deps.ps1"
 
@@ -33,15 +34,13 @@ if ($IsMacOS) {
 } else {
     $heifOn = "ON"
 }
+
 if ((qmake --version -split '\n')[1][17] -eq '6') {
     $qt6flag = "-DBUILD_WITH_QT6=ON"
 }
 
 # (Try to) resolve pthread error
-$env:CMAKE_CXX_FLAGS += ' -pthread'
-
-Write-Host "Query qmake"
-qmake -query
+$env:CXXFLAGS += ' -pthread'
 
 # Build kimageformats
 cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/installed" -DKIMAGEFORMATS_JXL=ON -DKIMAGEFORMATS_HEIF=$heifOn $qt6flag -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" .
