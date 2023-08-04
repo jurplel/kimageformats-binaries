@@ -14,7 +14,7 @@ jobs:
             vers: '5.15.2'
           - os: macos-latest
             vers: '5.15.2'
-            univeralBinary: 'false'
+            universalBinary: 'false'
           - os: windows-2019
             vers: '5.15.2'
             forceWin32: 'true'
@@ -25,7 +25,7 @@ jobs:
             arch: 'win64_msvc2019_64'
           - os: macos-latest
             vers: '6.2.2'
-            univeralBinary: 'true'
+            universalBinary: 'true'
 
     steps:
       - uses: actions/checkout@v2
