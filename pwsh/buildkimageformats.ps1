@@ -52,6 +52,7 @@ ninja install
 
 # Build arm64 version as well and macos and lipo them together
 if ($env:universalBinary) {
+    Write-Host "Building arm64 binaries"
     rm -rf CMakeFiles/
     rm -rf CMakeCache.txt
 
@@ -60,6 +61,7 @@ if ($env:universalBinary) {
     ninja
     ninja install
 
+    Write-Host "Combining kimageformats binaries to universal"
 # Lipo stuff TODO
     mkdir -p installed_univ/
 
