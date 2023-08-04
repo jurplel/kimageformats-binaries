@@ -23,9 +23,9 @@ if ($IsWindows) {
 & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1" $kde_vers
 & "$env:GITHUB_WORKSPACE/pwsh/get-vcpkg-deps.ps1"
 # don't bother building karchive on win32, doesn't work for whatever reason
-if ($env:forceWin32 -ne 'true') {
-    & "$env:GITHUB_WORKSPACE/pwsh/buildkarchive.ps1" $kde_vers
-}
+# if ($env:forceWin32 -ne 'true') {
+#     & "$env:GITHUB_WORKSPACE/pwsh/buildkarchive.ps1" $kde_vers
+# }
 
 # HEIF not necessary on macOS since it ships with HEIF support
 if ($IsMacOS) {
