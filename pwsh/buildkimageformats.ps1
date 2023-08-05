@@ -1,4 +1,4 @@
-#!/usr/bin/env pwsh
+/usr/bin/env pwsh
 
 $kde_vers = 'v5.108.0'
 
@@ -54,6 +54,13 @@ cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/installed
 ninja
 ninja install
 
+# Location of actual plugin files
+$prefix = "installed/lib/plugins/imageformats/"
+$prefix_out = "output/"
+
+# Make output folder
+mkdir -p $prefix_out
+
 # Build arm64 version as well and macos and lipo them together
 if ($env:universalBinary) {
     Write-Host "Building arm64 binaries"
@@ -66,54 +73,29 @@ if ($env:universalBinary) {
     ninja install
 
     Write-Host "Combining kimageformats binaries to universal"
-# Lipo stuff TODO
-    mkdir -p installed_univ/
 
-    $prefix = "installed"
-    $prefix_arm = "installed_arm64/"
-    $prefix_out = "installed_univ/"
+    $prefix_arm = "installed_arm64/lib/plugins/imageformats/"
 
-    $files = Get-ChildItem "$prefix" -Recurse -Filter *.so # dylib? TODO
+    $files = Get-ChildItem "$prefix" -Recurse -Filter *.so
     foreach ($file in $files) {
-        Write-Host $file
-        # $name = $file.Name
-        # lipo -create "$file" "$prefix2/$name" -output "universal/lib/$name"
-        # lipo -info "universal/lib/$name"
-        lipo -info "$file"
+        lipo -create "$file" "$prefix_arm/$name" -output "$prefix_out/$name"
+        lipo -info "$prefix_out/$name"
+    }
+} else {
+# Copy shared libs from installed to output folder
+    $files = Get-ChildItem "$prefix" -Recurse
+    foreach ($file in $files) {
+        cp $file $prefix_out
     }
 }
 
 
-
-# Copy stuff to output
+# Copy karchive stuff to output as well
 if ($IsWindows) {
-    cp karchive/bin/*.dll  bin/
-
-    cp libjxl/installed/bin/*.dll bin/
-    cp libjxl/build/third_party/brotli/*.dll bin/
-
-    # TODO: Probably wrong
-    cp libavif/build/installed/usr/local/lib/*.dll bin/
-
-    cp openexr/installed/bin/*.dll bin/
+    cp karchive/bin/*.dll $prefix_out
 } elseif ($IsMacOS) {
-    cp karchive/bin/*.dylib  bin/
-
-    cp libjxl/installed/lib/*.dylib  bin/
-
-    cp libavif/build/installed/usr/local/lib/*.dylib bin/
-
-    cp openexr/installed/lib/*.dylib  bin/
+    cp karchive/bin/*.dylib $prefix_out
 } else {
     $env:KF5LibLoc = Split-Path -Path (Get-Childitem -Include libKF5Archive.so.5 -Recurse -ErrorAction SilentlyContinue)[0]
-    cp $env:KF5LibLoc/* bin/
-
-    cp libjxl/installed/lib/*  bin/
-    cp libjxl/build/third_party/brotli/* bin/
-
-    # TODO: Possibly wrong
-    cp libavif/build/installed/usr/local/lib/*.dll bin/
-    cp libavif/build/installed/usr/local/lib/* bin/
-
-    cp openexr/installed/lib/*  bin/
+    cp $env:KF5LibLoc/* $prefix_out
 }

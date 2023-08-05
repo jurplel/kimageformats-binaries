@@ -53,7 +53,7 @@ jobs:
         uses: thedoctor0/zip-release@0.7.1
         with:
           type: 'zip'
-          path: kimageformats/bin/
+          path: kimageformats/output/
           filename: "kimageformats-${{ matrix.os }}-${{ matrix.vers }}${{ matrix.arch && format('-{0}', matrix.arch) || '' }}.zip"
 
       - name: 'Upload to continous release'
