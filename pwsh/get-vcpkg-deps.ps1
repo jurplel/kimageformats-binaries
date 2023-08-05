@@ -57,9 +57,6 @@ if ($IsWindows) {
 
 # Build arm64-osx dependencies separately--we'll have to combine stuff later.
 if ($env:universalBinary) {
-    & "$env:VCPKG_ROOT/$vcpkgexec" install libwebp:arm64-osx
     & "$env:VCPKG_ROOT/$vcpkgexec" install --keep-going libjxl:arm64-osx libavif:arm64-osx openexr:arm64-osx zlib:arm64-osx
 }
-
-
 
