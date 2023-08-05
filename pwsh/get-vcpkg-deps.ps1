@@ -19,11 +19,14 @@ if ($IsWindows) {
     choco install nasm
 } elseif ($IsMacOS) {
     brew install nasm
+# Remove this package on macOS because it caues problems
+    brew uninstall --ignore-dependencies webp # Avoid linking to homebrew stuff later
 } else {
     # (and bonus dependencies)
     sudo apt-get install nasm libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev
 }
 
+# Set up prefixes
 if ($IsWindows) {
     & "$env:GITHUB_WORKSPACE\pwsh\vcvars.ps1"
     
@@ -52,7 +55,6 @@ if (-Not $IsMacOS) {
 
 # Build arm64-osx dependencies separately--we'll have to combine stuff later.
 if ($env:universalBinary) {
-    brew uninstall --ignore-dependencies webp # Avoid linking to homebrew stuff later
     & "$env:VCPKG_ROOT/$vcpkgexec" install --keep-going libjxl:arm64-osx libavif:arm64-osx openexr:arm64-osx zlib:arm64-osx libraw:arm64-osx
 }
 
