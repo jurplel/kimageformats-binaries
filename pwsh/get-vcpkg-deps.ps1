@@ -42,7 +42,7 @@ if ($IsWindows) {
 } else {
     $vcpkgexec = "vcpkg"
 }
-& "$env:VCPKG_ROOT/$vcpkgexec" install --keep-going libjxl libavif openexr zlib
+& "$env:VCPKG_ROOT/$vcpkgexec" install --keep-going libjxl libavif openexr zlib libraw
 
 
 # No point to building libheif on mac since Qt has built-in support for HEIF on macOS. Also, this avoids CI problems.
@@ -50,14 +50,9 @@ if (-Not $IsMacOS) {
     & "$env:VCPKG_ROOT/$vcpkgexec" install libheif
 }
 
-if ($IsWindows) {
-    # Windows has no problems with libraw unlike mac/linux, so we can build it here.
-    & "$env:VCPKG_ROOT/$vcpkgexec" install libraw
-}
-
 # Build arm64-osx dependencies separately--we'll have to combine stuff later.
 if ($env:universalBinary) {
     brew uninstall --ignore-dependencies webp # Avoid linking to homebrew stuff later
-    & "$env:VCPKG_ROOT/$vcpkgexec" install --keep-going libjxl:arm64-osx libavif:arm64-osx openexr:arm64-osx zlib:arm64-osx
+    & "$env:VCPKG_ROOT/$vcpkgexec" install --keep-going libjxl:arm64-osx libavif:arm64-osx openexr:arm64-osx zlib:arm64-osx libraw:arm64-osx
 }
 
