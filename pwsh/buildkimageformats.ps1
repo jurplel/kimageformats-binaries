@@ -56,10 +56,6 @@ if ($env:universalBinary) {
     rm -rf CMakeFiles/
     rm -rf CMakeCache.txt
 
-    cp usr/local/lib/libraw.dylib $PWD/installed/usr/local/lib/
-
-    arch -arm64 brew install libraw
-
     cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/installed_arm64" -DKIMAGEFORMATS_JXL=ON -DKIMAGEFORMATS_HEIF=$heifOn $qt6flag -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET="arm64-osx" -DCMAKE_OSX_ARCHITECTURES="arm64" .
 
     ninja
