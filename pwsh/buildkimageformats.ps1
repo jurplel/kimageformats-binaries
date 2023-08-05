@@ -7,6 +7,10 @@ git clone https://invent.kde.org/frameworks/kimageformats.git
 cd kimageformats
 git checkout $kde_vers
 
+# Apply patch to cmake file for vcpkg libraw
+if (-Not $IsWindows) {
+    patch -R CMakeLists.txt ../util/kimageformats-find-libraw-vcpkg.patch 
+}
 
 
 # dependencies
