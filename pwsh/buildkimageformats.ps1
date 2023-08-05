@@ -55,8 +55,8 @@ ninja
 ninja install
 
 # Location of actual plugin files
-$prefix = "installed/lib/plugins/imageformats/"
-$prefix_out = "output/"
+$prefix = "installed/lib/plugins/imageformats"
+$prefix_out = "output"
 
 # Make output folder
 mkdir -p $prefix_out
@@ -77,10 +77,11 @@ if ($env:universalBinary) {
 
     Write-Host "Combining kimageformats binaries to universal"
 
-    $prefix_arm = "installed_arm64/lib/plugins/imageformats/"
+    $prefix_arm = "installed_arm64/lib/plugins/imageformats"
 
     $files = Get-ChildItem "$prefix" -Recurse -Filter *.so
     foreach ($file in $files) {
+        $name = $file.Name
         lipo -create "$file" "$prefix_arm/$name" -output "$prefix_out/$name"
         lipo -info "$prefix_out/$name"
     }
