@@ -38,6 +38,7 @@ jobs:
           arch: ${{ matrix.arch }}
 
       - name: Cleanup
+        shell: bash
         run: |
           gh extension install actions/gh-actions-cache
           
