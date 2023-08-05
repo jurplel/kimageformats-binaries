@@ -14,7 +14,6 @@ jobs:
             vers: '5.15.2'
           - os: macos-latest
             vers: '5.15.2'
-            universalBinary: 'false'
           - os: windows-2019
             vers: '5.15.2'
             forceWin32: 'true'

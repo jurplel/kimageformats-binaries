@@ -55,7 +55,6 @@ ninja
 ninja install
 
 # Location of actual plugin files
-$prefix = "installed/lib/plugins/imageformats"
 $prefix_out = "output"
 
 # Make output folder
@@ -77,8 +76,10 @@ if ($env:universalBinary) {
 
     Write-Host "Combining kimageformats binaries to universal"
 
+    $prefix = "installed/lib/plugins/imageformats"
     $prefix_arm = "installed_arm64/lib/plugins/imageformats"
 
+    # Combine the two binaries and copy them to the output folder
     $files = Get-ChildItem "$prefix" -Recurse -Filter *.so
     foreach ($file in $files) {
         $name = $file.Name
@@ -86,8 +87,8 @@ if ($env:universalBinary) {
         lipo -info "$prefix_out/$name"
     }
 } else {
-# Copy shared libs from installed to output folder
-    $files = Get-ChildItem "$prefix" -Recurse
+# Copy binaries from installed to output folder
+    $files = dir ./installed/ -recurse | where {$_.extension -in ".dylib",".dll",".so"}
     foreach ($file in $files) {
         cp $file $prefix_out
     }
