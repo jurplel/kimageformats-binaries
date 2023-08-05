@@ -26,13 +26,22 @@ if ((qmake --version -split '\n')[1][17] -eq '6') {
 # Build
 cmake -G Ninja -DCMAKE_INSTALL_PREFIX="$PWD/installed/" -DCMAKE_BUILD_TYPE=Release $qt6flag -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" .
 
-# Build arm64 version as well and macos and lipo them together
-if ($env:universalBinary) {
-    cmake -G Ninja -DCMAKE_INSTALL_PREFIX="$PWD/installed_arm64/" -DCMAKE_BUILD_TYPE=Release $qt6flag -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET="arm64-osx" .
-}
-
 ninja
 ninja install
+
+# Build arm64 version as well and macos and lipo them together
+if ($env:universalBinary) {
+    Write-Host "Building arm64 binaries"
+
+    rm -rf CMakeFiles/
+    rm -rf CMakeCache.txt
+
+    cmake -G Ninja -DCMAKE_INSTALL_PREFIX="$PWD/installed_arm64/" -DCMAKE_BUILD_TYPE=Release $qt6flag -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET="arm64-osx" .
+
+    ninja
+    ninja install
+}
+
 
 try {
     cd installed/ -ErrorAction Stop
