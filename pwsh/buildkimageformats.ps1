@@ -94,6 +94,11 @@ if ($env:universalBinary) {
     }
 }
 
+# Fix linking on macOS
+if ($IsMacOS) {
+    install_name_tool -change /Users/runner/work/kimageformats-binaries/kimageformats-binaries/kimageformats/karchive/installed//libKF5Archive.5.dylib @rpath/libKF5Archive.5.dylib output/kimg_kra.so
+    install_name_tool -change /Users/runner/work/kimageformats-binaries/kimageformats-binaries/kimageformats/karchive/installed//libKF5Archive.5.dylib @rpath/libKF5Archive.5.dylib output/kimg_ora.so
+}
 
 # Copy karchive stuff to output as well
 if ($IsWindows) {
