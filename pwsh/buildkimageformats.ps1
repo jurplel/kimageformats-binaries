@@ -66,7 +66,7 @@ if ($env:universalBinary) {
 
     rm -rf CMakeFiles/
     rm -rf CMakeCache.txt
-
+    
     $env:KF5Archive_DIR = $env:KF5Archive_DIR_ARM
 
     cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/installed_arm64" -DKIMAGEFORMATS_JXL=ON -DKIMAGEFORMATS_HEIF=$heifOn $qt6flag -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET="arm64-osx" -DCMAKE_OSX_ARCHITECTURES="arm64" .
@@ -86,11 +86,29 @@ if ($env:universalBinary) {
         lipo -create "$file" "$prefix_arm/$name" -output "$prefix_out/$name"
         lipo -info "$prefix_out/$name"
     }
+
+    # Combine karchive binaries too and send them to output
+    $files = Get-ChildItem "karchive/installed/lib/" -Recurse -Filter *.dylib
+    foreach ($file in $files) {
+        $name = $file.Name
+        lipo -create "$file" "karchive/installed_arm64/lib/$name" -output "$prefix_out/$name"
+        lipo -info "$prefix_out/$name"
+    }
 } else {
-# Copy binaries from installed to output folder
+    # Copy binaries from installed to output folder
     $files = dir ./installed/ -recurse | where {$_.extension -in ".dylib",".dll",".so"}
     foreach ($file in $files) {
         cp $file $prefix_out
+    }
+
+    # Copy karchive stuff to output as well
+    if ($IsWindows) {
+        cp karchive/bin/*.dll $prefix_out
+    } elseif ($IsMacOS) {
+        cp karchive/bin/*.dylib $prefix_out
+    } else {
+        $env:KF5LibLoc = Split-Path -Path (Get-Childitem -Include libKF5Archive.so.5 -Recurse -ErrorAction SilentlyContinue)[0]
+        cp $env:KF5LibLoc/* $prefix_out
     }
 }
 
@@ -105,12 +123,3 @@ if ($IsMacOS) {
     }
 }
 
-# Copy karchive stuff to output as well
-if ($IsWindows) {
-    cp karchive/bin/*.dll $prefix_out
-} elseif ($IsMacOS) {
-    cp karchive/bin/*.dylib $prefix_out
-} else {
-    $env:KF5LibLoc = Split-Path -Path (Get-Childitem -Include libKF5Archive.so.5 -Recurse -ErrorAction SilentlyContinue)[0]
-    cp $env:KF5LibLoc/* $prefix_out
-}

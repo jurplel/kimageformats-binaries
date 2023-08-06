@@ -1,4 +1,4 @@
-#! /usr/bin/pwsh
+#!/usr/bin/env pwsh
 
 # Clone
 git clone https://invent.kde.org/frameworks/karchive.git
