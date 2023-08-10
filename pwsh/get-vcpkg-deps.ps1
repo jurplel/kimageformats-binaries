@@ -33,6 +33,8 @@ if ($IsWindows) {
     # Use environment variable to detect if we're building for 64-bit or 32-bit Windows 
     if ([Environment]::Is64BitOperatingSystem -and ($env:forceWin32 -ne 'true')) {
         $env:VCPKG_DEFAULT_TRIPLET = "x64-windows"
+    } else {
+        $env:VCPKG_DEFAULT_TRIPLET = "x86-windows"
     }
 } elseif ($IsMacOS) {
     # Makes things more reproducible for testing on M1 machines
