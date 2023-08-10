@@ -104,6 +104,7 @@ if ($env:universalBinary) {
     # Copy karchive stuff to output as well
     if ($IsWindows) {
         cp karchive/bin/*.dll $prefix_out
+        # Also copy all the vcpkg DLLs on windows, since it's apparently not static by default
         cp "$env:VCPKG_ROOT/installed/$env:VCPKG_DEFAULT_TRIPLET/bin/*.dll" $prefix_out
     } elseif ($IsMacOS) {
         cp karchive/bin/*.dylib $prefix_out
