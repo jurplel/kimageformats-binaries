@@ -3,8 +3,7 @@
 # Clone
 git clone https://github.com/jurplel/QtApng.git
 cd QtApng
-git checkout 31bdace25eee2c35a351008c3886823f65e39447
-
+git checkout 250f218ceeefdf2a6e66b596799abd279adea033
 
 
 # Build
