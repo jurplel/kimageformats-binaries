@@ -23,6 +23,13 @@ jobs:
           - os: macos-latest
             vers: '6.2.2'
             forceWin32: 'false'
+          - os: windows-2019
+            vers: '6.5.0'
+            forceWin32: 'false'
+            arch: 'win64_msvc2019_64'
+          - os: macos-latest
+            vers: '6.5.0'
+            forceWin32: 'false'
 
     steps:
       - uses: actions/checkout@v2
