@@ -26,11 +26,11 @@ jobs:
             vers: '6.2.2'
             forceWin32: 'false'
           - os: windows-2019
-            vers: '6.5.0'
+            vers: '6.4.3'
             forceWin32: 'false'
             arch: 'win64_msvc2019_64'
           - os: macos-latest
-            vers: '6.5.0'
+            vers: '6.4.3'
             forceWin32: 'false'
 
     steps:
