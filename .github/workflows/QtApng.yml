@@ -3,6 +3,8 @@ on:
   push:
     branches: [ master ]
   workflow_dispatch:
+  pull_request:
+    branches: [ master ]
 
 jobs:
   build:
@@ -53,6 +55,7 @@ jobs:
           filename: "qtapng-${{ matrix.os }}-${{ matrix.vers }}${{ matrix.arch && format('-{0}', matrix.arch) || '' }}.zip"
 
       - name: 'Upload to continous release'
+        if: github.event_name != 'pull_request'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: 'cont'
