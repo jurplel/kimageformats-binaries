@@ -1,14 +1,16 @@
 name: Build KImageFormats
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   workflow_dispatch:
+  pull_request:
+    branches: [master]
 
 jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
-      matrix: 
+      matrix:
         include:
           - os: ubuntu-20.04
             vers: '5.15.2'
@@ -24,6 +26,13 @@ jobs:
             arch: 'win64_msvc2019_64'
           - os: macos-latest
             vers: '6.2.2'
+            universalBinary: 'true'
+          - os: windows-2019
+            vers: '6.4.3'
+            forceWin32: 'false'
+            arch: 'win64_msvc2019_64'
+          - os: macos-latest
+            vers: '6.4.3'
             universalBinary: 'true'
 
     steps:
@@ -56,7 +65,8 @@ jobs:
           filename: "kimageformats-${{ matrix.os }}-${{ matrix.vers }}${{ matrix.arch && format('-{0}', matrix.arch) || '' }}.zip"
 
       - name: 'Upload to continous release'
+        if: github.event_name != 'pull_request'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: 'cont'
-          files:  kimageformats-*.zip
+          files: kimageformats-*.zip
