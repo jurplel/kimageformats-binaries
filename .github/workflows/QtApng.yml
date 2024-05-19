@@ -53,14 +53,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: qtapng-${{ matrix.os }}-${{ matrix.vers }}${{ matrix.arch && format('-{0}', matrix.arch) || '' }}
-          path: QtApng/plugins
+          path: QtApng/output
 
       - name: 'Zip Artifact'
         if: github.ref == 'refs/heads/master'
         uses: thedoctor0/zip-release@0.7.1
         with:
           type: 'zip'
-          path: QtApng/plugins/
+          path: QtApng/output/
           filename: "qtapng-${{ matrix.os }}-${{ matrix.vers }}${{ matrix.arch && format('-{0}', matrix.arch) || '' }}.zip"
 
       - name: 'Upload to continous release'
