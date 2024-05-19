@@ -47,7 +47,15 @@ jobs:
         env:
           forceWin32: ${{ matrix.forceWin32 }}
 
+      - name: 'Upload Artifact'
+        if: github.ref != 'refs/heads/master'
+        uses: actions/upload-artifact@v4
+        with:
+          name: qtapng-${{ matrix.os }}-${{ matrix.vers }}${{ matrix.arch && format('-{0}', matrix.arch) || '' }}
+          path: QtApng/plugins
+
       - name: 'Zip Artifact'
+        if: github.ref == 'refs/heads/master'
         uses: thedoctor0/zip-release@0.7.1
         with:
           type: 'zip'
@@ -55,7 +63,7 @@ jobs:
           filename: "qtapng-${{ matrix.os }}-${{ matrix.vers }}${{ matrix.arch && format('-{0}', matrix.arch) || '' }}.zip"
 
       - name: 'Upload to continous release'
-        if: github.event_name != 'pull_request'
+        if: github.ref == 'refs/heads/master'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: 'cont'
