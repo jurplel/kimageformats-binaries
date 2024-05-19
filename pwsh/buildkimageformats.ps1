@@ -122,3 +122,7 @@ if ($IsMacOS) {
     }
 }
 
+if ($IsWindows) {
+    Write-Host "`nDetecting plugin dependencies..."
+    & "$env:GITHUB_WORKSPACE/pwsh/scankimgdeps.ps1" $prefix_out
+}
