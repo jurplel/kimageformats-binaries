@@ -47,7 +47,7 @@ if ($IsWindows) {
 } else {
     $vcpkgexec = "vcpkg"
 }
-& "$env:VCPKG_ROOT/$vcpkgexec" install --keep-going libjxl libavif openexr zlib libraw
+& "$env:VCPKG_ROOT/$vcpkgexec" install --keep-going libjxl libavif[aom] openexr zlib libraw
 
 
 # No point to building libheif on mac since Qt has built-in support for HEIF on macOS. Also, this avoids CI problems.
@@ -57,6 +57,6 @@ if (-Not $IsMacOS) {
 
 # Build arm64-osx dependencies separately--we'll have to combine stuff later.
 if ($env:universalBinary) {
-    & "$env:VCPKG_ROOT/$vcpkgexec" install --keep-going libjxl:arm64-osx libavif:arm64-osx openexr:arm64-osx zlib:arm64-osx libraw:arm64-osx
+    & "$env:VCPKG_ROOT/$vcpkgexec" install --keep-going libjxl:arm64-osx libavif[aom]:arm64-osx openexr:arm64-osx zlib:arm64-osx libraw:arm64-osx
 }
 

@@ -1,6 +1,6 @@
 --- kimageformats/CMakeLists.txt	2023-08-05 16:14:58
 +++ CMakeLists.txt	2023-08-05 16:14:49
-@@ -71,11 +71,20 @@
+@@ -74,11 +74,15 @@
  add_feature_info(LibJXL LibJXL_FOUND "required for the QImage plugin for JPEG XL images")
  
  # note: module FindLibRaw missing from https://invent.kde.org/frameworks/extra-cmake-modules
@@ -12,11 +12,6 @@
      TYPE OPTIONAL
      PURPOSE "Required for the QImage plugin for RAW images"
  )
-+# Horrific hack to fix the include path...
-+get_property(include TARGET libraw::raw PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
-+cmake_path(REPLACE_FILENAME include "include/libraw")
-+set_property(TARGET libraw::raw PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${include})
-+
 +# Adapt naming so the rest of the cmake infra finds this new target
 +add_library(LibRaw::LibRaw ALIAS libraw::raw)
 +set(LibRaw_FOUND ${libraw_FOUND})
