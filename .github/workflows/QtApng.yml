@@ -34,7 +34,7 @@ jobs:
             forceWin32: 'false'
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
@@ -56,7 +56,7 @@ jobs:
 
       - name: 'Upload to continous release'
         if: github.event_name != 'pull_request'
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: 'cont'
           files:  qtapng-*.zip
