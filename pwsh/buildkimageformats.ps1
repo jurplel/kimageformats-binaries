@@ -1,4 +1,4 @@
-/usr/bin/env pwsh
+#!/usr/bin/env pwsh
 
 $kde_vers = 'v5.116.0'
 
