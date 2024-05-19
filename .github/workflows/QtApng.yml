@@ -26,11 +26,11 @@ jobs:
             vers: '6.2.2'
             universalBinary: 'true'
           - os: windows-2019
-            vers: '6.4.3'
+            vers: '6.5.3'
             forceWin32: 'false'
             arch: 'win64_msvc2019_64'
           - os: macos-12
-            vers: '6.4.3'
+            vers: '6.5.3'
             universalBinary: 'true'
 
     steps:
