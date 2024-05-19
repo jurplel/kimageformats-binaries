@@ -13,7 +13,9 @@ if ($IsWindows) {
     & "$env:GITHUB_WORKSPACE/pwsh/vcvars.ps1"
 }
 
-qmake "CONFIG += libpng_static" QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64"
+$argDeviceArchs = $env:universalBinary ? "QMAKE_APPLE_DEVICE_ARCHS=x86_64 arm64" : $null
+qmake CONFIG+=libpng_static $argDeviceArchs
+
 if ($IsWindows) {
     nmake
 } else {

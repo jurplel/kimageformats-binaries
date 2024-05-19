@@ -24,14 +24,14 @@ jobs:
             arch: 'win64_msvc2019_64'
           - os: macos-12
             vers: '6.2.2'
-            forceWin32: 'false'
+            universalBinary: 'true'
           - os: windows-2019
             vers: '6.4.3'
             forceWin32: 'false'
             arch: 'win64_msvc2019_64'
           - os: macos-12
             vers: '6.4.3'
-            forceWin32: 'false'
+            universalBinary: 'true'
 
     steps:
       - uses: actions/checkout@v4
@@ -46,6 +46,7 @@ jobs:
         run: pwsh pwsh/buildapng.ps1
         env:
           forceWin32: ${{ matrix.forceWin32 }}
+          universalBinary: ${{ matrix.universalBinary }}
 
       - name: 'Upload Artifact'
         if: github.ref != 'refs/heads/master'
