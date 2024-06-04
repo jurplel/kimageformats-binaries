@@ -1,6 +1,6 @@
-/usr/bin/env pwsh
+#!/usr/bin/env pwsh
 
-$kde_vers = 'v5.108.0'
+$kde_vers = 'v5.116.0'
 
 # Clone
 git clone https://invent.kde.org/frameworks/kimageformats.git
@@ -27,17 +27,7 @@ if ($IsWindows) {
 
 & "$env:GITHUB_WORKSPACE/pwsh/buildecm.ps1" $kde_vers
 & "$env:GITHUB_WORKSPACE/pwsh/get-vcpkg-deps.ps1"
-
-if ($env:forceWin32 -ne 'true') {
-    & "$env:GITHUB_WORKSPACE/pwsh/buildkarchive.ps1" $kde_vers
-}
-
-# HEIF not necessary on macOS since it ships with HEIF support
-if ($IsMacOS) {
-    $heifOn = "OFF"
-} else {
-    $heifOn = "ON"
-}
+& "$env:GITHUB_WORKSPACE/pwsh/buildkarchive.ps1" $kde_vers
 
 if ((qmake --version -split '\n')[1][17] -eq '6') {
     $qt6flag = "-DBUILD_WITH_QT6=ON"
@@ -49,7 +39,7 @@ if (-Not $IsWindows) {
 }
 
 # Build kimageformats
-cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/installed" -DKIMAGEFORMATS_JXL=ON -DKIMAGEFORMATS_HEIF=$heifOn $qt6flag -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" .
+cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/installed" -DKIMAGEFORMATS_JXL=ON -DKIMAGEFORMATS_HEIF=ON $qt6flag -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" .
 
 ninja
 ninja install
@@ -69,7 +59,7 @@ if ($env:universalBinary) {
     
     $env:KF5Archive_DIR = $env:KF5Archive_DIR_ARM
 
-    cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/installed_arm64" -DKIMAGEFORMATS_JXL=ON -DKIMAGEFORMATS_HEIF=$heifOn $qt6flag -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET="arm64-osx" -DCMAKE_OSX_ARCHITECTURES="arm64" .
+    cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/installed_arm64" -DKIMAGEFORMATS_JXL=ON -DKIMAGEFORMATS_HEIF=ON $qt6flag -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET="arm64-osx" -DCMAKE_OSX_ARCHITECTURES="arm64" .
 
     ninja
     ninja install
@@ -125,3 +115,7 @@ if ($IsMacOS) {
     }
 }
 
+if ($IsWindows) {
+    Write-Host "`nDetecting plugin dependencies..."
+    & "$env:GITHUB_WORKSPACE/pwsh/scankimgdeps.ps1" $prefix_out
+}

@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, macos-latest]
+        os: [ubuntu-20.04, macos-12]
         vers: ['5.15.2']
         include:
           - os: windows-2019
@@ -22,23 +22,24 @@ jobs:
             vers: '6.2.2'
             forceWin32: 'false'
             arch: 'win64_msvc2019_64'
-          - os: macos-latest
+          - os: macos-12
             vers: '6.2.2'
-            forceWin32: 'false'
+            universalBinary: 'true'
           - os: windows-2019
-            vers: '6.4.3'
+            vers: '6.5.3'
             forceWin32: 'false'
             arch: 'win64_msvc2019_64'
-          - os: macos-latest
-            vers: '6.4.3'
-            forceWin32: 'false'
+          - os: macos-12
+            vers: '6.5.3'
+            universalBinary: 'true'
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v3
+        uses: jurplel/install-qt-action@v4
         with:
+          cache: true
           version: ${{ matrix.vers }}
           arch: ${{ matrix.arch }}
 
@@ -46,17 +47,26 @@ jobs:
         run: pwsh pwsh/buildapng.ps1
         env:
           forceWin32: ${{ matrix.forceWin32 }}
+          universalBinary: ${{ matrix.universalBinary }}
+
+      - name: 'Upload Artifact'
+        if: github.ref != 'refs/heads/master'
+        uses: actions/upload-artifact@v4
+        with:
+          name: qtapng-${{ matrix.os }}-${{ matrix.vers }}${{ matrix.arch && format('-{0}', matrix.arch) || '' }}
+          path: QtApng/output
 
       - name: 'Zip Artifact'
+        if: github.ref == 'refs/heads/master'
         uses: thedoctor0/zip-release@0.7.1
         with:
           type: 'zip'
-          path: QtApng/plugins/
+          path: QtApng/output/
           filename: "qtapng-${{ matrix.os }}-${{ matrix.vers }}${{ matrix.arch && format('-{0}', matrix.arch) || '' }}.zip"
 
       - name: 'Upload to continous release'
-        if: github.event_name != 'pull_request'
-        uses: softprops/action-gh-release@v1
+        if: github.ref == 'refs/heads/master'
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: 'cont'
           files:  qtapng-*.zip

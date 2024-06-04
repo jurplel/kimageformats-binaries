@@ -8,6 +8,8 @@ git checkout $args[0]
 if ($IsWindows) {
     if ([Environment]::Is64BitOperatingSystem -and ($env:forceWin32 -ne 'true')) {
         $env:VCPKG_DEFAULT_TRIPLET = "x64-windows"
+    } else {
+        $env:VCPKG_DEFAULT_TRIPLET = "x86-windows"
     }
     # vcvars on windows
     & "$env:GITHUB_WORKSPACE\pwsh\vcvars.ps1"
