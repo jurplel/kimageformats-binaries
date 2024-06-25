@@ -29,13 +29,12 @@ if ($IsWindows) {
 # Set up prefixes
 if ($IsWindows) {
     & "$env:GITHUB_WORKSPACE\pwsh\vcvars.ps1"
-    
-    # Use environment variable to detect if we're building for 64-bit or 32-bit Windows 
-    if ([Environment]::Is64BitOperatingSystem -and ($env:forceWin32 -ne 'true')) {
-        $env:VCPKG_DEFAULT_TRIPLET = "x64-windows"
-    } else {
-        $env:VCPKG_DEFAULT_TRIPLET = "x86-windows"
-    }
+
+    # Use environment variable to detect target platform
+    $env:VCPKG_DEFAULT_TRIPLET =
+        $env:buildArch -eq 'X86' ? 'x86-windows' :
+        $env:buildArch -eq 'Arm64' ? 'arm64-windows' :
+        'x64-windows'
 } elseif ($IsMacOS) {
     # Makes things more reproducible for testing on M1 machines
     $env:VCPKG_DEFAULT_TRIPLET = "x64-osx"
@@ -47,10 +46,24 @@ if ($IsWindows) {
 } else {
     $vcpkgexec = "vcpkg"
 }
-& "$env:VCPKG_ROOT/$vcpkgexec" install --keep-going libjxl libavif[aom] libheif openexr zlib libraw
 
-# Build arm64-osx dependencies separately--we'll have to combine stuff later.
-if ($env:universalBinary) {
-    & "$env:VCPKG_ROOT/$vcpkgexec" install --keep-going libjxl:arm64-osx libavif[aom]:arm64-osx libheif:arm64-osx openexr:arm64-osx zlib:arm64-osx libraw:arm64-osx
+# This function will be called for each triplet being built
+function InstallPackages() {
+    # libheif: Skip x265 on arm64-windows as it doesn't build (only needed for encoding)
+    $libheif = $env:VCPKG_DEFAULT_TRIPLET -eq 'arm64-windows' ? 'libheif[core]' : 'libheif'
+
+    & "$env:VCPKG_ROOT/$vcpkgexec" install libjxl libavif[aom] $libheif openexr zlib libraw
 }
 
+# Build for main triplet
+InstallPackages
+
+# Build arm64-osx dependencies separately--we'll have to combine stuff later.
+if ($IsMacOS -and $env:buildArch -eq 'Universal') {
+    $mainTriplet = $env:VCPKG_DEFAULT_TRIPLET
+    $env:VCPKG_DEFAULT_TRIPLET = 'arm64-osx'
+
+    InstallPackages
+
+    $env:VCPKG_DEFAULT_TRIPLET = $mainTriplet
+}
