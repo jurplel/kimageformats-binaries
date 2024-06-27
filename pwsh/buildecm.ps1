@@ -11,7 +11,7 @@ if ($IsWindows) {
 }
 
 # Build
-if ($env:universalBinary) {
+if ($IsMacOS -and $env:buildArch -eq 'Universal') {
     cmake -G Ninja . -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
 } else {
     cmake -G Ninja .

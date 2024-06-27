@@ -15,6 +15,10 @@ if (-Not $IsWindows) {
 
 # dependencies
 if ($IsWindows) {
+    if ($env:buildArch -eq 'Arm64') {
+        # CMake needs QT_HOST_PATH when cross-compiling
+        $env:QT_HOST_PATH = [System.IO.Path]::GetFullPath("$env:QT_ROOT_DIR\..\$((Split-Path -Path $env:QT_ROOT_DIR -Leaf) -replace '_arm64', '_64')")
+    }
     & "$env:GITHUB_WORKSPACE/pwsh/vcvars.ps1"
     choco install ninja pkgconfiglite
 } elseif ($IsMacOS) {
@@ -51,7 +55,7 @@ $prefix_out = "output"
 mkdir -p $prefix_out
 
 # Build arm64 version as well and macos and lipo them together
-if ($env:universalBinary) {
+if ($IsMacOS -and $env:buildArch -eq 'Universal') {
     Write-Host "Building arm64 binaries"
 
     rm -rf CMakeFiles/
@@ -109,7 +113,7 @@ if ($IsMacOS) {
     install_name_tool -change /Users/runner/work/kimageformats-binaries/kimageformats-binaries/kimageformats/karchive/installed//libKF5Archive.5.dylib @rpath/libKF5Archive.5.dylib output/kimg_kra.so
     install_name_tool -change /Users/runner/work/kimageformats-binaries/kimageformats-binaries/kimageformats/karchive/installed//libKF5Archive.5.dylib @rpath/libKF5Archive.5.dylib output/kimg_ora.so
 
-    if ($env:universalBinary) {
+    if ($IsMacOS -and $env:buildArch -eq 'Universal') {
         install_name_tool -change /Users/runner/work/kimageformats-binaries/kimageformats-binaries/kimageformats/karchive/installed_arm64//libKF5Archive.5.dylib @rpath/libKF5Archive.5.dylib output/kimg_kra.so
         install_name_tool -change /Users/runner/work/kimageformats-binaries/kimageformats-binaries/kimageformats/karchive/installed_arm64//libKF5Archive.5.dylib @rpath/libKF5Archive.5.dylib output/kimg_ora.so
     }

@@ -16,24 +16,26 @@ jobs:
             vers: '5.15.2'
           - os: macos-12
             vers: '5.15.2'
-          - os: windows-2019
+          - os: windows-2022
             vers: '5.15.2'
-            forceWin32: 'true'
             arch: 'win32_msvc2019'
-          - os: windows-2019
+            buildArch: 'X86'
+          - os: windows-2022
             vers: '6.2.2'
-            forceWin32: 'false'
             arch: 'win64_msvc2019_64'
           - os: macos-12
             vers: '6.2.2'
-            universalBinary: 'true'
-          - os: windows-2019
+            buildArch: 'Universal'
+          - os: windows-2022
             vers: '6.5.3'
-            forceWin32: 'false'
             arch: 'win64_msvc2019_64'
+          - os: windows-2022
+            vers: '6.5.3'
+            arch: 'win64_msvc2019_arm64'
+            buildArch: 'Arm64'
           - os: macos-12
             vers: '6.5.3'
-            universalBinary: 'true'
+            buildArch: 'Universal'
 
     steps:
       - uses: actions/checkout@v4
@@ -54,8 +56,7 @@ jobs:
       - name: Build KImageFormats (just one big step for now)
         run: pwsh pwsh/buildkimageformats.ps1
         env:
-          forceWin32: ${{ matrix.forceWin32 }}
-          universalBinary: ${{ matrix.universalBinary }}
+          buildArch: ${{ matrix.buildArch }}
 
       - name: 'Upload Artifact'
         if: github.ref != 'refs/heads/master'

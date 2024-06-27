@@ -5,12 +5,9 @@ git clone https://invent.kde.org/frameworks/karchive.git
 cd karchive
 git checkout $args[0]
 
+# NOTE: This script assumes VCPKG_DEFAULT_TRIPLET is already set (e.g. by get-vcpkg-deps.ps1 running prior)
+
 if ($IsWindows) {
-    if ([Environment]::Is64BitOperatingSystem -and ($env:forceWin32 -ne 'true')) {
-        $env:VCPKG_DEFAULT_TRIPLET = "x64-windows"
-    } else {
-        $env:VCPKG_DEFAULT_TRIPLET = "x86-windows"
-    }
     # vcvars on windows
     & "$env:GITHUB_WORKSPACE\pwsh\vcvars.ps1"
 }
@@ -32,7 +29,7 @@ ninja
 ninja install
 
 # Build arm64 version as well and macos and lipo them together
-if ($env:universalBinary) {
+if ($IsMacOS -and $env:buildArch -eq 'Universal') {
     Write-Host "Building arm64 binaries"
 
     rm -rf CMakeFiles/
@@ -52,7 +49,7 @@ try {
 
     cd ../
 
-    if ($env:universalBinary) {
+    if ($IsMacOS -and $env:buildArch -eq 'Universal') {
         cd installed_arm64/ -ErrorAction Stop
 
         $env:KF5Archive_DIR_ARM = Split-Path -Path (Get-Childitem -Include KF5ArchiveConfig.cmake -Recurse -ErrorAction SilentlyContinue)[0]
