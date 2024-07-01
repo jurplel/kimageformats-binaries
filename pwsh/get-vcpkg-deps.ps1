@@ -68,6 +68,12 @@ function WriteOverlayTriplet() {
 
     # Skip debug builds
     AppendLine 'set(VCPKG_BUILD_TYPE release)'
+
+    if ($IsWindows) {
+        # Workaround for https://developercommunity.visualstudio.com/t/10664660
+        AppendLine 'string(APPEND VCPKG_CXX_FLAGS " -D_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR")'
+        AppendLine 'string(APPEND VCPKG_C_FLAGS " -D_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR")'
+    }
 }
 
 # This function will be called for each triplet being built
