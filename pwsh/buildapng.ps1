@@ -15,6 +15,10 @@ if ($IsWindows) {
     }
     & "$env:GITHUB_WORKSPACE/pwsh/vcvars.ps1"
     choco install ninja pkgconfiglite
+
+    # Workaround for https://developercommunity.visualstudio.com/t/10664660
+    $env:CXXFLAGS += " -D_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR"
+    $env:CFLAGS += " -D_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR"
 } elseif ($IsMacOS) {
     brew update
     brew install ninja
