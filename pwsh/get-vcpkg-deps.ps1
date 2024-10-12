@@ -90,10 +90,7 @@ function WriteOverlayTriplet() {
 function InstallPackages() {
     WriteOverlayTriplet
 
-    # libheif: Skip x265 on arm64-windows as it doesn't build (only needed for encoding)
-    $libheif = $env:VCPKG_DEFAULT_TRIPLET -eq 'arm64-windows' ? 'libheif[core]' : 'libheif'
-
-    & "$env:VCPKG_ROOT/$vcpkgexec" install libjxl libavif[aom] $libheif openexr zlib libraw
+    & "$env:VCPKG_ROOT/$vcpkgexec" install libjxl libavif[aom] libheif openexr zlib libraw
 }
 
 # Build for main triplet
