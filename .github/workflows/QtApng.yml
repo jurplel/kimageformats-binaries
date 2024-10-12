@@ -21,12 +21,6 @@ jobs:
             arch: 'win32_msvc2019'
             buildArch: 'X86'
           - os: windows-2022
-            vers: '6.2.2'
-            arch: 'win64_msvc2019_64'
-          - os: macos-12
-            vers: '6.2.2'
-            buildArch: 'Universal'
-          - os: windows-2022
             vers: '6.5.3'
             arch: 'win64_msvc2019_64'
           - os: windows-2022
