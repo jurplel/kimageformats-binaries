@@ -1,5 +1,7 @@
 #!/usr/bin/env pwsh
 
+$qtVersion = [version]((qmake --version -split '\n')[1] -split ' ')[3]
+
 # Clone
 git clone https://invent.kde.org/frameworks/karchive.git
 cd karchive
@@ -12,18 +14,17 @@ if ($IsWindows) {
     & "$env:GITHUB_WORKSPACE\pwsh\vcvars.ps1"
 }
 
-# don't use homebrew zlib/zstd 
 if ($IsMacOS) {
-    brew uninstall --ignore-dependencies zlib
+    # Uninstall this because there's only one architecture installed, which
+    # prevents the other architecture of the universal binary from building
     brew uninstall --ignore-dependencies zstd
 }
 
-if ((qmake --version -split '\n')[1][17] -eq '6') {
-    $qt6flag = "-DBUILD_WITH_QT6=ON"
-}
+$argQt6 = $qtVersion.Major -eq 6 ? '-DBUILD_WITH_QT6=ON' : $null
+$argDeviceArchs = $IsMacOS -and $env:buildArch -eq 'Universal' ? '-DCMAKE_OSX_ARCHITECTURES=x86_64' : $null
 
 # Build
-cmake -G Ninja -DCMAKE_INSTALL_PREFIX="$PWD/installed/" -DCMAKE_BUILD_TYPE=Release $qt6flag -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" .
+cmake -G Ninja -DCMAKE_INSTALL_PREFIX="$PWD/installed/" -DCMAKE_BUILD_TYPE=Release $argQt6 $argDeviceArchs -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" .
 
 ninja
 ninja install
@@ -35,7 +36,7 @@ if ($IsMacOS -and $env:buildArch -eq 'Universal') {
     rm -rf CMakeFiles/
     rm -rf CMakeCache.txt
 
-    cmake -G Ninja -DCMAKE_INSTALL_PREFIX="$PWD/installed_arm64/" -DCMAKE_BUILD_TYPE=Release $qt6flag -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET="arm64-osx" .
+    cmake -G Ninja -DCMAKE_INSTALL_PREFIX="$PWD/installed_arm64/" -DCMAKE_BUILD_TYPE=Release $argQt6 -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET="arm64-osx" .
 
     ninja
     ninja install

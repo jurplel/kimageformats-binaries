@@ -1,5 +1,7 @@
 #!/usr/bin/env pwsh
 
+using namespace System.Runtime.InteropServices
+
 # Install vcpkg if we don't already have it
 if ($env:VCPKG_ROOT -eq $null) {
   git clone https://github.com/microsoft/vcpkg
@@ -19,27 +21,35 @@ if ($IsWindows) {
     choco install nasm
 } elseif ($IsMacOS) {
     brew install nasm
-# Remove this package on macOS because it caues problems
-    brew uninstall --ignore-dependencies webp # Avoid linking to homebrew stuff later
 } else {
     # (and bonus dependencies)
     sudo apt-get install nasm libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev
 }
 
 # Set default triplet
+$hostArch = [RuntimeInformation]::OSArchitecture
 if ($IsWindows) {
-    # Use environment variable to detect target platform
     $env:VCPKG_DEFAULT_TRIPLET =
         $env:buildArch -eq 'X86' ? 'x86-windows' :
         $env:buildArch -eq 'Arm64' ? 'arm64-windows' :
-        'x64-windows'
+        $hostArch -eq [Architecture]::X64 ? 'x64-windows' :
+        $null
 } elseif ($IsMacOS) {
-    # Build x64 first; arm64 will come later for universal binaries
-    $env:VCPKG_DEFAULT_TRIPLET = "x64-osx"
+    # For universal binaries, build x64 first; arm64 will come later
+    $env:VCPKG_DEFAULT_TRIPLET =
+        $env:buildArch -eq 'Universal' ? 'x64-osx' :
+        $hostArch -eq [Architecture]::X64 ? 'x64-osx' :
+        $hostArch -eq [Architecture]::Arm64 ? 'arm64-osx' :
+        $null
 } elseif ($IsLinux) {
-    $env:VCPKG_DEFAULT_TRIPLET = "x64-linux"
+    $env:VCPKG_DEFAULT_TRIPLET =
+        $hostArch -eq [Architecture]::X64 ? 'x64-linux' :
+        $null
 } else {
     throw 'Unsupported platform.'
+}
+if (-not $env:VCPKG_DEFAULT_TRIPLET) {
+    throw 'Unsupported architecture.'
 }
 
 # Get our dependencies using vcpkg!
