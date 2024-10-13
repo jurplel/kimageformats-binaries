@@ -10,12 +10,10 @@ if ($IsWindows) {
     & "$env:GITHUB_WORKSPACE/pwsh/vcvars.ps1"
 }
 
+$argDeviceArchs = $IsMacOS -and $env:buildArch -eq 'Universal' ? '-DCMAKE_OSX_ARCHITECTURES=x86_64;arm64' : $null
+
 # Build
-if ($IsMacOS -and $env:buildArch -eq 'Universal') {
-    cmake -G Ninja . -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
-} else {
-    cmake -G Ninja .
-}
+cmake -G Ninja . $argDeviceArchs
 
 if ($IsWindows) {
     ninja install

@@ -1,5 +1,8 @@
 #!/usr/bin/env pwsh
 
+$qtVersion = [version]((qmake --version -split '\n')[1] -split ' ')[3]
+Write-Host "Detected Qt Version $qtVersion"
+
 $kde_vers = 'v5.116.0'
 
 # Clone
@@ -28,6 +31,11 @@ if ($IsWindows) {
 } elseif ($IsMacOS) {
     brew update
     brew install ninja
+
+    if ($qtVersion -lt [version]'6.5.3') {
+        # Workaround for QTBUG-117484
+        sudo xcode-select --switch /Applications/Xcode_14.3.1.app
+    }
 } else {
     sudo apt-get install ninja-build
 }
@@ -37,17 +45,16 @@ if ($IsWindows) {
 & "$env:GITHUB_WORKSPACE/pwsh/get-vcpkg-deps.ps1"
 & "$env:GITHUB_WORKSPACE/pwsh/buildkarchive.ps1" $kde_vers
 
-if ((qmake --version -split '\n')[1][17] -eq '6') {
-    $qt6flag = "-DBUILD_WITH_QT6=ON"
-}
-
 # Resolve pthread error on linux
 if (-Not $IsWindows) {
     $env:CXXFLAGS += ' -pthread'
 }
 
+$argQt6 = $qtVersion.Major -eq 6 ? '-DBUILD_WITH_QT6=ON' : $null
+$argDeviceArchs = $IsMacOS -and $env:buildArch -eq 'Universal' ? '-DCMAKE_OSX_ARCHITECTURES=x86_64' : $null
+
 # Build kimageformats
-cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/installed" -DKIMAGEFORMATS_JXL=ON -DKIMAGEFORMATS_HEIF=ON $qt6flag -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" .
+cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/installed" -DKIMAGEFORMATS_JXL=ON -DKIMAGEFORMATS_HEIF=ON $argQt6 -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" $argDeviceArchs .
 
 ninja
 ninja install
@@ -67,7 +74,7 @@ if ($IsMacOS -and $env:buildArch -eq 'Universal') {
     
     $env:KF5Archive_DIR = $env:KF5Archive_DIR_ARM
 
-    cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/installed_arm64" -DKIMAGEFORMATS_JXL=ON -DKIMAGEFORMATS_HEIF=ON $qt6flag -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET="arm64-osx" -DCMAKE_OSX_ARCHITECTURES="arm64" .
+    cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/installed_arm64" -DKIMAGEFORMATS_JXL=ON -DKIMAGEFORMATS_HEIF=ON $argQt6 -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET="arm64-osx" -DCMAKE_OSX_ARCHITECTURES="arm64" .
 
     ninja
     ninja install

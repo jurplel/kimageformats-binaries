@@ -1,6 +1,7 @@
 #!/usr/bin/env pwsh
 
-$qtVersion = ((qmake --version -split '\n')[1] -split ' ')[3]
+$qtVersion = [version]((qmake --version -split '\n')[1] -split ' ')[3]
+Write-Host "Detected Qt Version $qtVersion"
 
 # Clone
 git clone https://github.com/jurplel/QtApng.git
@@ -22,17 +23,24 @@ if ($IsWindows) {
 } elseif ($IsMacOS) {
     brew update
     brew install ninja
+
+    if ($qtVersion -lt [version]'6.5.3') {
+        # Workaround for QTBUG-117484
+        sudo xcode-select --switch /Applications/Xcode_14.3.1.app
+    }
 } else {
     sudo apt-get install ninja-build
 }
 
+$argQt6 = $qtVersion.Major -ne 6 ? '-DAPNG_QT6=OFF' : $null
+$argDeviceArchs = $IsMacOS -and $env:buildArch -eq 'Universal' ? '-DCMAKE_OSX_ARCHITECTURES=x86_64' : $null
+
 # Build
-$argApngQt6 = $qtVersion -like '5.*' ? "-DAPNG_QT6=OFF" : $null
-cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release $argApngQt6
+cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release $argQt6 $argDeviceArchs
 ninja -C build
 
 if ($IsMacOS -and $env:buildArch -eq 'Universal') {
-    cmake -B build_arm64 -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=arm64
+    cmake -B build_arm64 -G Ninja -DCMAKE_BUILD_TYPE=Release $argQt6 -DCMAKE_OSX_ARCHITECTURES=arm64
     ninja -C build_arm64
 }
 
