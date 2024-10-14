@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [master]
 
+env:
+  VCPKG_BINARY_SOURCES: 'clear;default,readwrite'
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
