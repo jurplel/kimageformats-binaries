@@ -121,12 +121,14 @@ if ($IsMacOS -and $env:buildArch -eq 'Universal') {
 
 # Fix linking on macOS
 if ($IsMacOS) {
-    install_name_tool -change /Users/runner/work/kimageformats-binaries/kimageformats-binaries/kimageformats/karchive/installed//libKF5Archive.5.dylib @rpath/libKF5Archive.5.dylib output/kimg_kra.so
-    install_name_tool -change /Users/runner/work/kimageformats-binaries/kimageformats-binaries/kimageformats/karchive/installed//libKF5Archive.5.dylib @rpath/libKF5Archive.5.dylib output/kimg_ora.so
+    $libDirName = $qtVersion.Major -eq 5 ? 'lib' : '' # empty name results in double slash in path which is intentional
+
+    install_name_tool -change "$(Get-Location)/karchive/installed/$libDirName/libKF5Archive.5.dylib" @rpath/libKF5Archive.5.dylib output/kimg_kra.so
+    install_name_tool -change "$(Get-Location)/karchive/installed/$libDirName/libKF5Archive.5.dylib" @rpath/libKF5Archive.5.dylib output/kimg_ora.so
 
     if ($IsMacOS -and $env:buildArch -eq 'Universal') {
-        install_name_tool -change /Users/runner/work/kimageformats-binaries/kimageformats-binaries/kimageformats/karchive/installed_arm64//libKF5Archive.5.dylib @rpath/libKF5Archive.5.dylib output/kimg_kra.so
-        install_name_tool -change /Users/runner/work/kimageformats-binaries/kimageformats-binaries/kimageformats/karchive/installed_arm64//libKF5Archive.5.dylib @rpath/libKF5Archive.5.dylib output/kimg_ora.so
+        install_name_tool -change "$(Get-Location)/karchive/installed_arm64/$libDirName/libKF5Archive.5.dylib" @rpath/libKF5Archive.5.dylib output/kimg_kra.so
+        install_name_tool -change "$(Get-Location)/karchive/installed_arm64/$libDirName/libKF5Archive.5.dylib" @rpath/libKF5Archive.5.dylib output/kimg_ora.so
     }
 }
 
