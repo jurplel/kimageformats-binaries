@@ -2,6 +2,8 @@
 
 using namespace System.Runtime.InteropServices
 
+$kfGitRef = $args[0]
+
 # Install vcpkg if we don't already have it
 if ($env:VCPKG_ROOT -eq $null) {
   git clone https://github.com/microsoft/vcpkg
@@ -89,9 +91,26 @@ function WriteOverlayTriplet() {
     }
 }
 
+# Create overlay ports directory
+$env:VCPKG_OVERLAY_PORTS = "$env:GITHUB_WORKSPACE/vcpkg-overlay-ports"
+New-Item -ItemType Directory -Path $env:VCPKG_OVERLAY_PORTS -Force
+
+# Customizes ports by adding them to the overlay ports directory
+function WriteOverlayPorts() {
+    # Remove any existing files
+    Remove-Item -Path "$env:VCPKG_OVERLAY_PORTS/*" -Recurse -Force
+
+    # OpenEXR 3.3 introduced a change that's only compatible with KDE Frameworks 6.8+
+    if ($kfGitRef -like 'v5.*' -or $kfGitRef -like 'v6.[0-7].*') {
+        Copy-Item -Path "$env:GITHUB_WORKSPACE/util/overlay-openexr-3.2.4" -Destination "$env:VCPKG_OVERLAY_PORTS/openexr" -Recurse
+    }
+}
+
 # This function will be called for each triplet being built
 function InstallPackages() {
     WriteOverlayTriplet
+
+    WriteOverlayPorts
 
     & "$env:VCPKG_ROOT/$vcpkgexec" install libjxl libavif[aom] libheif openexr zlib libraw
 }
