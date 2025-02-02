@@ -1,6 +1,6 @@
 #!/usr/bin/env pwsh
 
-$qtVersion = [version]((qmake --version -split '\n')[1] -split ' ')[3]
+$qtVersion = [version](qmake -query QT_VERSION)
 Write-Host "Detected Qt Version $qtVersion"
 
 # Clone
@@ -12,7 +12,7 @@ git checkout 6a83caf22111cb8054753b925c2dfbcd9b92e038
 if ($IsWindows) {
     if ($env:buildArch -eq 'Arm64') {
         # CMake needs QT_HOST_PATH when cross-compiling
-        $env:QT_HOST_PATH = [System.IO.Path]::GetFullPath("$env:QT_ROOT_DIR\..\$((Split-Path -Path $env:QT_ROOT_DIR -Leaf) -replace '_arm64', '_64')")
+        $env:QT_HOST_PATH = (qmake -query QT_HOST_PREFIX)
     }
     & "$env:GITHUB_WORKSPACE/pwsh/vcvars.ps1"
     choco install ninja pkgconfiglite
@@ -55,5 +55,10 @@ foreach ($file in $files) {
         lipo -info "$outputDir/$name"
     } else {
         Copy-Item -Path $file -Destination $outputDir
+
+        # Fix linking on Linux
+        if ($IsLinux) {
+            patchelf --set-rpath '$ORIGIN/../../lib' (Join-Path -Path $outputDir -ChildPath $file.Name)
+        }
     }
 }

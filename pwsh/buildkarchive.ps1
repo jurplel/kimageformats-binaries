@@ -1,11 +1,14 @@
 #!/usr/bin/env pwsh
 
-$qtVersion = [version]((qmake --version -split '\n')[1] -split ' ')[3]
+$qtVersion = [version](qmake -query QT_VERSION)
+
+$kfGitRef = $args[0]
+$kfMajorVer = $kfGitRef -like 'v5.*' ? 5 : 6
 
 # Clone
 git clone https://invent.kde.org/frameworks/karchive.git
 cd karchive
-git checkout $args[0]
+git checkout $kfGitRef
 
 # NOTE: This script assumes VCPKG_DEFAULT_TRIPLET is already set (e.g. by get-vcpkg-deps.ps1 running prior)
 
@@ -15,8 +18,7 @@ if ($IsWindows) {
 }
 
 if ($IsMacOS) {
-    # Uninstall this because there's only one architecture installed, which
-    # prevents the other architecture of the universal binary from building
+    # We don't need the zstd feature and it will crash at runtime if this one is used anyway
     brew uninstall --ignore-dependencies zstd
 }
 
@@ -24,7 +26,7 @@ $argQt6 = $qtVersion.Major -eq 6 ? '-DBUILD_WITH_QT6=ON' : $null
 $argDeviceArchs = $IsMacOS -and $env:buildArch -eq 'Universal' ? '-DCMAKE_OSX_ARCHITECTURES=x86_64' : $null
 
 # Build
-cmake -G Ninja -DCMAKE_INSTALL_PREFIX="$PWD/installed/" -DCMAKE_BUILD_TYPE=Release $argQt6 $argDeviceArchs -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" .
+cmake -G Ninja -DCMAKE_INSTALL_PREFIX="$PWD/installed/" -DCMAKE_BUILD_TYPE=Release $argQt6 $argDeviceArchs -DWITH_BZIP2=OFF -DWITH_LIBLZMA=OFF -DWITH_LIBZSTD=OFF -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" .
 
 ninja
 ninja install
@@ -36,27 +38,24 @@ if ($IsMacOS -and $env:buildArch -eq 'Universal') {
     rm -rf CMakeFiles/
     rm -rf CMakeCache.txt
 
-    cmake -G Ninja -DCMAKE_INSTALL_PREFIX="$PWD/installed_arm64/" -DCMAKE_BUILD_TYPE=Release $argQt6 -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET="arm64-osx" .
+    cmake -G Ninja -DCMAKE_INSTALL_PREFIX="$PWD/installed_arm64/" -DCMAKE_BUILD_TYPE=Release $argQt6 -DCMAKE_OSX_ARCHITECTURES="arm64" -DWITH_BZIP2=OFF -DWITH_LIBLZMA=OFF -DWITH_LIBZSTD=OFF -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET="arm64-osx" .
 
     ninja
     ninja install
 }
 
+function FindKArchiveDir() {
+    return Split-Path -Path (Get-Childitem -Include "KF${kfMajorVer}ArchiveConfig.cmake" -Recurse -ErrorAction SilentlyContinue)[0]
+}
 
-try {
-    cd installed/ -ErrorAction Stop
+cd installed/ -ErrorAction Stop
+[Environment]::SetEnvironmentVariable("KF${kfMajorVer}Archive_DIR", (FindKArchiveDir))
+cd ../
 
-    $env:KF5Archive_DIR = Split-Path -Path (Get-Childitem -Include KF5ArchiveConfig.cmake -Recurse -ErrorAction SilentlyContinue)[0]
-
+if ($IsMacOS -and $env:buildArch -eq 'Universal') {
+    cd installed_arm64/ -ErrorAction Stop
+    [Environment]::SetEnvironmentVariable("KF${kfMajorVer}Archive_DIR_ARM", (FindKArchiveDir))
     cd ../
-
-    if ($IsMacOS -and $env:buildArch -eq 'Universal') {
-        cd installed_arm64/ -ErrorAction Stop
-
-        $env:KF5Archive_DIR_ARM = Split-Path -Path (Get-Childitem -Include KF5ArchiveConfig.cmake -Recurse -ErrorAction SilentlyContinue)[0]
-
-        cd ../
-    }
-} catch {}
+}
 
 cd ../
