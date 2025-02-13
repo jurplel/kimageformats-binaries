@@ -21,9 +21,11 @@ if ($IsWindows) {
     choco install nasm
 } elseif ($IsMacOS) {
     brew install nasm
-    # Uninstall this because it can result in a non-working heif plugin,
-    # but it might not be present, so silence stderr
-    brew uninstall --ignore-dependencies webp 2>$null
+    # Uninstall these, otherwise the heif plugin could reference them and
+    # end up not working, but silence stderr in case they aren't present
+    foreach ($pkgName in @('webp', 'aom', 'libvmaf')) {
+        brew uninstall --ignore-dependencies $pkgName 2>$null
+    }
 } else {
     # (and bonus dependencies)
     sudo apt-get install nasm libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev

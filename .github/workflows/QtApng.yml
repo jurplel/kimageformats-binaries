@@ -21,14 +21,14 @@ jobs:
             arch: 'win32_msvc2019'
             buildArch: 'X86'
           - os: windows-2022
-            vers: '6.7.3'
-            arch: 'win64_msvc2019_64'
+            vers: '6.8.2'
+            arch: 'win64_msvc2022_64'
           - os: windows-2022
-            vers: '6.7.3'
-            arch: 'win64_msvc2019_arm64'
+            vers: '6.8.2'
+            arch: 'win64_msvc2022_arm64_cross_compiled'
             buildArch: 'Arm64'
           - os: macos-14
-            vers: '6.7.3'
+            vers: '6.8.2'
             buildArch: 'Universal'
 
     steps:
