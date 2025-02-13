@@ -128,6 +128,8 @@ if ($IsMacOS) {
     $karchLibName = "libKF${kfMajorVer}Archive.$kfMajorVer"
     $libDirName = $kfMajorVer -le 5 -and $qtVersion.Major -ge 6 ? '' : 'lib' # empty name results in double slash in path which is intentional
 
+    install_name_tool -id "@rpath/$karchLibName.dylib" "$prefix_out/$karchLibName.dylib"
+
     install_name_tool -change "$(Get-Location)/karchive/installed/$libDirName/$karchLibName.dylib" "@rpath/$karchLibName.dylib" "$prefix_out/kimg_kra$kimgLibExt"
     install_name_tool -change "$(Get-Location)/karchive/installed/$libDirName/$karchLibName.dylib" "@rpath/$karchLibName.dylib" "$prefix_out/kimg_ora$kimgLibExt"
 
