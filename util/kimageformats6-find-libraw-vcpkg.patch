@@ -1,8 +1,8 @@
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -75,11 +75,13 @@
- endif()
- add_feature_info(LibJXL LibJXL_FOUND "required for the QImage plugin for JPEG XL images")
+@@ -85,11 +85,12 @@
+ add_feature_info(OpenJPEG OpenJPEG_FOUND "required for the QImage plugin for JPEG 2000 images")
+ 
  
 -find_package(LibRaw 0.20.2)
 +find_package(LibRaw 0.20.2 NAMES libraw)
@@ -10,8 +10,7 @@
      TYPE OPTIONAL
      PURPOSE "Required for the QImage plugin for RAW images"
  )
-+# Adapt naming so the rest of the cmake infra finds this new target
-+add_library(LibRaw::LibRaw ALIAS libraw::raw)
++add_library(LibRaw::LibRaw ALIAS libraw::raw_r)
  
+ # JXR plugin disabled by default due to security issues
  option(KIMAGEFORMATS_JXR "Enable plugin for JPEG XR format" OFF)
- if(KIMAGEFORMATS_JXR)

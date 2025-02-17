@@ -1,6 +1,6 @@
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -74,11 +74,13 @@
+@@ -74,11 +74,12 @@
  add_feature_info(LibJXL LibJXL_FOUND "required for the QImage plugin for JPEG XL images")
  
  # note: module FindLibRaw missing from https://invent.kde.org/frameworks/extra-cmake-modules
@@ -10,8 +10,7 @@
      TYPE OPTIONAL
      PURPOSE "Required for the QImage plugin for RAW images"
  )
-+# Adapt naming so the rest of the cmake infra finds this new target
-+add_library(LibRaw::LibRaw ALIAS libraw::raw)
++add_library(LibRaw::LibRaw ALIAS libraw::raw_r)
  
  ecm_set_disabled_deprecation_versions(
      QT 5.15.2
