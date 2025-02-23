@@ -18,10 +18,10 @@ git clone https://invent.kde.org/frameworks/kimageformats.git
 cd kimageformats
 git checkout $kfGitRef
 
-# Apply patch to cmake file for vcpkg libraw
-if (-Not $IsWindows) {
-    patch CMakeLists.txt "../util/kimageformats$kfMajorVer-find-libraw-vcpkg.patch"
-}
+# Patch CMakeLists to work with vcpkg's libraw, bypassing KImageFormats' FindLibRaw.cmake
+# module. The patch also specifies the thread-safe version of libraw.
+patch CMakeLists.txt "../util/kimageformats$kfMajorVer-find-libraw-vcpkg.patch"
+rm "cmake/find-modules/FindLibRaw.cmake"
 
 
 # dependencies
