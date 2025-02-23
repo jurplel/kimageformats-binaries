@@ -47,6 +47,8 @@ function GetNestedDeps($dllPath) {
     return $visited | Where-Object { $_ -ne $dllPath } | ForEach-Object { Split-Path $_ -Leaf } | Sort-Object
 }
 
+$allDeps = [System.Collections.Generic.HashSet[string]]::new()
+
 # Loop through DLL files starting with "kimg_" in the specified directory in alphabetical order
 Get-ChildItem -Path $dir -Filter "kimg_*.dll" |
     Sort-Object Name |
@@ -56,8 +58,11 @@ Get-ChildItem -Path $dir -Filter "kimg_*.dll" |
         
         # Check if any dependencies were found and output appropriately
         if ($deps.Count -gt 0) {
-            # Joining dependency names to pass as an array
-            $depList = $deps -join '", "'
-            Write-Output "$dllName`: `"$depList`""
+            # Append to the set of all dependencies
+            $deps | ForEach-Object { [void]$allDeps.Add($_) }
+            # Display this file's dependencies
+            Write-Information "$dllName`: `"$($deps -join '", "')`"" -InformationAction Continue
         }
     }
+
+return $allDeps | Sort-Object
