@@ -6,7 +6,7 @@ Write-Host "Detected Qt Version $qtVersion"
 # Clone
 git clone https://github.com/jurplel/QtApng.git
 cd QtApng
-git checkout 6a83caf22111cb8054753b925c2dfbcd9b92e038
+git checkout bd15516b281204e90ecd5b80b00d1274b062f5fc
 
 # Dependencies
 if ($IsWindows) {
