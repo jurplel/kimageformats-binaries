@@ -12,6 +12,7 @@ jobs:
     strategy:
       matrix:
         include:
+          - os: ubuntu-22.04
             vers: '5.15.2'
           - os: macos-13
             vers: '5.15.2'
