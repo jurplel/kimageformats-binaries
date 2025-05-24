@@ -48,7 +48,7 @@ jobs:
       - name: Setup vcpkg
         uses: lukka/run-vcpkg@v11
         with:
-          vcpkgGitCommitId: '0d5cae153065957df7f382de7c1549ccc88027e5'
+          vcpkgGitCommitId: '8f54ef5453e7e76ff01e15988bf243e7247c5eb5'
 
       - name: Build KImageFormats (just one big step for now)
         run: pwsh pwsh/buildkimageformats.ps1
